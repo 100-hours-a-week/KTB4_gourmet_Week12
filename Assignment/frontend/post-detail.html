@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세 · Gourmet Community</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/gc-theme.css">
+    <link rel="stylesheet" href="./css/post-detail.css">
+    <link rel="stylesheet" href="./css/profile-menu.css">
+    <script src="./js/api.js" defer></script>
+    <script src="./js/board-meta.js" defer></script>
+    <script src="./js/profile-menu.js" defer></script>
+    <script src="./js/navigation.js" defer></script>
+    <script src="./js/post-detail.js" defer></script>
+</head>
+<body>
+    <div class="page">
+        <div class="atmosphere" aria-hidden="true"></div>
+
+        <header class="header detail-header">
+            <button type="button" class="back-button" id="back-button" aria-label="뒤로 가기">‹</button>
+            <img class="header-logo" id="main-logo" src="./gourmet_community_logo.png" alt="Gourmet Community" width="48" height="48">
+            <div class="profile-menu-wrapper">
+                <button type="button" class="profile-button" id="header-profile-button" aria-label="프로필 메뉴"></button>
+                <ul class="profile-dropdown" id="profile-dropdown">
+                    <li id="go-edit-profile">회원정보수정</li>
+                    <li id="go-edit-password">비밀번호수정</li>
+                    <li id="logout-button">로그아웃</li>
+                </ul>
+            </div>
+        </header>
+
+        <main class="main">
+            <article class="post-detail">
+                <header class="post-header">
+                    <p class="detail-eyebrow" id="detail-eyebrow">Post</p>
+                    <h2 id="post-title"></h2>
+                    <p class="project-period" id="project-period" hidden></p>
+
+                    <div class="post-info-row">
+                        <div class="writer-info">
+                            <div class="writer-image"></div>
+                            <div class="writer-meta">
+                                <strong id="writer-name"></strong>
+                                <span id="created-at"></span>
+                            </div>
+                        </div>
+
+                        <div class="post-actions">
+                            <button type="button" id="post-edit-button">수정</button>
+                            <button type="button" id="post-delete-button">삭제</button>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="post-body">
+                    <p class="post-content" id="post-content"></p>
+                    <div class="post-image-list" id="post-image-list"></div>
+                </div>
+
+                <div class="post-stats" aria-label="게시글 반응">
+                    <button type="button" class="stat-box like-box" id="like-button" aria-label="좋아요">
+                        <span class="like-icon" aria-hidden="true">♡</span>
+                        <strong id="like-count">0</strong>
+                        <span>좋아요</span>
+                    </button>
+
+                    <div class="stat-box">
+                        <strong id="view-count">0</strong>
+                        <span>조회</span>
+                    </div>
+
+                    <div class="stat-box">
+                        <strong id="comment-count">0</strong>
+                        <span>댓글</span>
+                    </div>
+                </div>
+            </article>
+
+            <section class="comment-panel" aria-label="댓글">
+                <div class="comment-panel-head">
+                    <h3 class="comment-panel-title">댓글</h3>
+                    <p class="comment-panel-desc">서로의 생각을 남겨보세요.</p>
+                </div>
+
+                <div class="comment-write-box">
+                    <label class="comment-label" for="comment-input">댓글 작성</label>
+                    <textarea id="comment-input" placeholder="생각을 남겨주세요."></textarea>
+                    <div class="comment-button-row">
+                        <button type="button" id="comment-submit-button" disabled>댓글 등록</button>
+                    </div>
+                </div>
+
+                <section class="comment-list" id="comment-list"></section>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-backdrop" id="post-delete-modal">
+        <div class="modal">
+            <h3>게시글을 삭제하시겠습니까?</h3>
+            <p>삭제한 내용은 복구할 수 없습니다.</p>
+            <div class="modal-buttons">
+                <button type="button" class="cancel-button" id="post-delete-cancel">취소</button>
+                <button type="button" class="confirm-button" id="post-delete-confirm">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="comment-delete-modal">
+        <div class="modal">
+            <h3>댓글을 삭제하시겠습니까?</h3>
+            <p>삭제한 내용은 복구할 수 없습니다.</p>
+            <div class="modal-buttons">
+                <button type="button" class="cancel-button" id="comment-delete-cancel">취소</button>
+                <button type="button" class="confirm-button" id="comment-delete-confirm">확인</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+#main-logo {
+    cursor: pointer;
+}
+
+.back-to-posts-button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background-color: transparent;
+    font-size: 28px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.page-title-row {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-title-row .back-to-posts-button {
+    position: absolute;
+    left: 0;
+}
+
+.page-title-row h2 {
+    margin: 0;
+}

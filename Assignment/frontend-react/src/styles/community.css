@@ -1,0 +1,650 @@
+.community-shell {
+    --community-header-height: 78px;
+    --community-sidebar-width: 230px;
+
+    min-height: 100vh;
+    color: #f3f1e8;
+    background: #07130c;
+}
+
+.community-atmosphere {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            ellipse 70% 45% at 50% -10%,
+            rgba(45, 79, 54, 0.68),
+            transparent 58%
+        ),
+        radial-gradient(
+            ellipse 45% 35% at 90% 90%,
+            rgba(118, 143, 122, 0.1),
+            transparent 52%
+        ),
+        linear-gradient(
+            180deg,
+            #07130c 0%,
+            #10271a 48%,
+            #07130c 100%
+        );
+}
+
+.community-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    min-height: var(--community-header-height);
+    display: grid;
+    grid-template-columns:
+        44px
+        54px
+        minmax(260px, 620px)
+        auto;
+    align-items: center;
+    gap: 18px;
+    padding: 0 26px;
+    border-bottom:
+        1px solid
+        rgba(220, 230, 217, 0.12);
+    background:
+        rgba(3, 17, 10, 0.9);
+    backdrop-filter: blur(16px);
+}
+
+.sidebar-toggle {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 1px solid rgba(230, 236, 226, 0.14);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+}
+
+.sidebar-toggle span {
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: rgba(243, 241, 232, 0.76);
+}
+
+.community-logo {
+    display: inline-flex;
+    width: 48px;
+    height: 48px;
+}
+
+.community-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.community-search {
+    width: min(100%, 620px);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    justify-self: center;
+}
+
+.community-search input {
+    min-width: 0;
+    height: 44px;
+    padding: 0 16px;
+    border: 1px solid rgba(215, 226, 212, 0.17);
+    border-right: 0;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+    color: #f3f1e8;
+    background: rgba(39, 70, 48, 0.54);
+}
+
+.community-search input:focus {
+    border-color: rgba(232, 238, 228, 0.44);
+}
+
+.community-search input::placeholder {
+    color: rgba(243, 241, 232, 0.38);
+}
+
+.community-search button {
+    height: 44px;
+    padding: 0 18px;
+    border: 1px solid rgba(215, 226, 212, 0.17);
+    border-radius: 0 8px 8px 0;
+    color: #f3f1e8;
+    background: rgba(56, 92, 65, 0.72);
+    cursor: pointer;
+}
+
+.community-profile {
+    position: relative;
+    justify-self: end;
+}
+
+.community-profile-button {
+    width: 43px;
+    height: 43px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid rgba(225, 234, 221, 0.18);
+    border-radius: 50%;
+    color: #f3f1e8;
+    background: rgba(255, 255, 255, 0.07);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.community-profile-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.community-profile-menu {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 210px;
+    overflow: hidden;
+    border: 1px solid rgba(221, 231, 218, 0.16);
+    border-radius: 12px;
+    background: #10291b;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.34);
+}
+
+.profile-menu-user {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 16px;
+    border-bottom: 1px solid rgba(221, 231, 218, 0.1);
+}
+
+.profile-menu-user strong {
+    color: #f3f1e8;
+}
+
+.profile-menu-user span {
+    overflow: hidden;
+    color: rgba(243, 241, 232, 0.45);
+    font-size: 12px;
+    text-overflow: ellipsis;
+}
+
+.community-profile-menu button {
+    width: 100%;
+    padding: 13px 16px;
+    color: rgba(243, 241, 232, 0.76);
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+}
+
+.community-profile-menu button:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.community-profile-menu .logout-menu-button {
+    color: #e8a0a0;
+}
+
+.community-body {
+    position: relative;
+    z-index: 1;
+    min-height:
+        calc(
+            100vh -
+            var(--community-header-height)
+        );
+    display: grid;
+    grid-template-columns:
+        var(--community-sidebar-width)
+        minmax(0, 1fr);
+    transition:
+        grid-template-columns
+        180ms ease;
+}
+
+.community-body.sidebar-collapsed {
+    grid-template-columns:
+        0
+        minmax(0, 1fr);
+}
+
+.board-sidebar {
+    position: sticky;
+    top: var(--community-header-height);
+    height:
+        calc(
+            100vh -
+            var(--community-header-height)
+        );
+    overflow: hidden;
+    padding: 34px 20px;
+    border-right:
+        1px solid
+        rgba(222, 232, 219, 0.1);
+    background: rgba(5, 23, 14, 0.74);
+    transition:
+        opacity 160ms ease,
+        padding 180ms ease;
+}
+
+.board-sidebar.is-closed {
+    padding-inline: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.board-sidebar-label {
+    margin: 0 10px 17px;
+    color: rgba(243, 241, 232, 0.38);
+    font-family:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+    font-size: 18px;
+    font-style: italic;
+}
+
+.board-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.board-navigation-link {
+    padding: 13px 14px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: rgba(243, 241, 232, 0.55);
+    font-weight: 600;
+}
+
+.board-navigation-link:hover {
+    color: #f3f1e8;
+    background: rgba(255, 255, 255, 0.045);
+}
+
+.board-navigation-link.active {
+    border-color: rgba(202, 220, 198, 0.13);
+    color: #f3f1e8;
+    background: rgba(52, 94, 65, 0.36);
+}
+
+.community-main {
+    min-width: 0;
+    padding: 58px 36px 100px;
+}
+
+.board-page {
+    width: min(100%, 920px);
+    margin: 0 auto;
+}
+
+.board-intro {
+    margin-bottom: 42px;
+}
+
+.board-eyebrow {
+    margin: 0 0 9px;
+    color: #adc5ac;
+    font-family:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+    font-size: 19px;
+    font-style: italic;
+    letter-spacing: 0.05em;
+}
+
+.board-intro h1 {
+    margin: 0;
+    font-family:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+    font-size: clamp(38px, 6vw, 56px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.board-description {
+    margin: 14px 0 0;
+    color: rgba(243, 241, 232, 0.47);
+    line-height: 1.7;
+}
+
+.board-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 17px;
+}
+
+.board-action h2 {
+    margin: 0;
+    font-family:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+    font-size: 27px;
+    font-weight: 600;
+}
+
+.board-write-button {
+    padding: 11px 20px;
+    border-radius: 7px;
+    color: #183321;
+    background: #ece9dd;
+    font-weight: 800;
+}
+
+.board-write-button:hover {
+    background: #ffffff;
+}
+
+.board-post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.post-card {
+    display: block;
+    overflow: hidden;
+    border: 1px solid rgba(215, 228, 211, 0.12);
+    border-radius: 12px;
+    color: inherit;
+    background: rgba(15, 44, 28, 0.72);
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease;
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(215, 228, 211, 0.26);
+    background: rgba(20, 55, 35, 0.82);
+}
+
+.post-card-content {
+    padding: 22px 22px 18px;
+}
+
+.post-card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 22px;
+}
+
+.post-card-text {
+    min-width: 0;
+}
+
+.post-card-badge {
+    display: inline-flex;
+    margin-bottom: 11px;
+    padding: 4px 8px;
+    border: 1px solid rgba(203, 219, 200, 0.16);
+    border-radius: 4px;
+    color: #b9cdb7;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+}
+
+.post-card-title {
+    margin: 0;
+    overflow: hidden;
+    color: #f3f1e8;
+    font-size: 22px;
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.post-card-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 13px;
+    color: rgba(243, 241, 232, 0.43);
+    font-size: 12px;
+}
+
+.post-card-period {
+    margin: 12px 0 0;
+    color: #b6c9b3;
+    font-size: 13px;
+}
+
+.post-thumbnail-wrapper {
+    flex: 0 0 128px;
+    width: 128px;
+    height: 94px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.post-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-card-writer {
+    display: flex;
+    align-items: center;
+    min-height: 54px;
+    padding: 10px 22px;
+    border-top:
+        1px solid
+        rgba(215, 228, 211, 0.09);
+    color: rgba(243, 241, 232, 0.48);
+    font-size: 12px;
+}
+
+.post-writer-image,
+.post-writer-fallback {
+    width: 31px;
+    height: 31px;
+    flex: 0 0 31px;
+    border-radius: 50%;
+}
+
+.post-writer-image {
+    object-fit: cover;
+}
+
+.post-writer-fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(223, 232, 219, 0.14);
+    color: rgba(243, 241, 232, 0.76);
+    background: rgba(255, 255, 255, 0.06);
+    font-weight: 700;
+}
+
+.post-writer-name {
+    margin-left: 9px;
+    color: rgba(243, 241, 232, 0.66);
+    font-weight: 600;
+}
+
+.post-created-at {
+    margin-left: auto;
+}
+
+.board-state-message,
+.board-error-message,
+.board-loading-more,
+.board-list-end {
+    margin: 0;
+    padding: 44px 20px;
+    border: 1px solid rgba(215, 228, 211, 0.09);
+    border-radius: 10px;
+    color: rgba(243, 241, 232, 0.46);
+    background: rgba(15, 44, 28, 0.42);
+    text-align: center;
+}
+
+.board-error-message {
+    color: #e8a0a0;
+}
+
+.board-loading-more,
+.board-list-end {
+    padding: 18px;
+    border: 0;
+    background: transparent;
+    font-size: 13px;
+}
+
+.load-more-target {
+    height: 2px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+}
+
+@media (max-width: 820px) {
+    .community-header {
+        grid-template-columns:
+            42px
+            46px
+            minmax(0, 1fr)
+            43px;
+        gap: 10px;
+        padding: 0 14px;
+    }
+
+    .community-search button {
+        padding-inline: 13px;
+    }
+
+    .community-body {
+        grid-template-columns: 0 1fr;
+    }
+
+    .board-sidebar {
+        position: fixed;
+        top: var(--community-header-height);
+        bottom: 0;
+        left: 0;
+        z-index: 25;
+        width: min(80vw, 260px);
+        height: auto;
+        padding: 28px 18px;
+        transform: translateX(-100%);
+        opacity: 1;
+        pointer-events: none;
+        transition: transform 180ms ease;
+    }
+
+    .board-sidebar.is-open {
+        transform: translateX(0);
+        pointer-events: auto;
+    }
+
+    .community-main {
+        padding: 38px 18px 80px;
+    }
+}
+
+@media (max-width: 560px) {
+    .community-header {
+        grid-template-columns:
+            40px
+            42px
+            minmax(0, 1fr)
+            40px;
+    }
+
+    .community-search input {
+        padding-inline: 11px;
+    }
+
+    .community-search button {
+        font-size: 0;
+        padding-inline: 12px;
+    }
+
+    .community-search button::after {
+        content: "⌕";
+        font-size: 18px;
+    }
+
+    .board-intro {
+        margin-bottom: 31px;
+    }
+
+    .board-action {
+        align-items: flex-end;
+    }
+
+    .board-write-button {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .post-card-content {
+        padding: 18px;
+    }
+
+    .post-card-top {
+        gap: 14px;
+    }
+
+    .post-thumbnail-wrapper {
+        flex-basis: 90px;
+        width: 90px;
+        height: 78px;
+    }
+
+    .post-card-title {
+        font-size: 18px;
+    }
+
+    .post-card-excerpt {
+        display: -webkit-box;
+        margin: 10px 0 0;
+        overflow: hidden;
+        color:
+            rgba(243, 241, 232, 0.52);
+        font-size: 14px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .post-card-writer {
+        padding-inline: 18px;
+    }
+
+    .post-created-at {
+        font-size: 11px;
+    }
+}

@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 20MB
+
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-exp-seconds: 1800
+  refresh-token-exp-seconds: 1209600

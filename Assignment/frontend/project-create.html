@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로젝트 모집 작성 · Gourmet Community</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/gc-theme.css">
+    <link rel="stylesheet" href="./css/post-create.css">
+    <link rel="stylesheet" href="./css/profile-menu.css">
+    <script src="./js/api.js" defer></script>
+    <script src="./js/board-meta.js" defer></script>
+    <script src="./js/profile-menu.js" defer></script>
+    <script src="./js/navigation.js" defer></script>
+    <script src="./js/project-create.js" defer></script>
+</head>
+<body>
+    <div class="page">
+        <div class="atmosphere" aria-hidden="true"></div>
+
+        <header class="header auth-header">
+            <button type="button" class="back-button" id="back-button" aria-label="뒤로 가기">‹</button>
+            <img class="header-logo" id="main-logo" src="./gourmet_community_logo.png" alt="Gourmet Community" width="48" height="48">
+            <div class="profile-menu-wrapper">
+                <button type="button" class="profile-button" id="header-profile-button" aria-label="프로필 메뉴"></button>
+                <ul class="profile-dropdown" id="profile-dropdown">
+                    <li id="go-edit-profile">회원정보수정</li>
+                    <li id="go-edit-password">비밀번호수정</li>
+                    <li id="logout-button">로그아웃</li>
+                </ul>
+            </div>
+        </header>
+
+        <main class="main">
+            <section class="post-create-box">
+                <p class="form-eyebrow">Project Recruit</p>
+                <h2>프로젝트 모집 작성</h2>
+                <p class="form-desc">모집 기간과 함께 팀원을 찾아보세요.</p>
+
+                <form id="project-create-form" novalidate>
+                    <div class="input-group">
+                        <label for="title">프로젝트 제목*</label>
+                        <input
+                            type="text"
+                            id="title"
+                            maxlength="26"
+                            placeholder="프로젝트 제목을 입력해주세요. (최대 26글자)"
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label>모집 기간*</label>
+                        <div class="period-row">
+                            <input type="date" id="period-start" aria-label="모집 시작일">
+                            <input type="date" id="period-end" aria-label="모집 종료일">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="content">모집 내용*</label>
+                        <textarea
+                            id="content"
+                            placeholder="프로젝트 소개, 모집 인원, 기술 스택, 진행 방식 등을 적어주세요."
+                        ></textarea>
+                    </div>
+
+                    <p class="helper-text" id="form-helper"></p>
+
+                    <div class="image-group">
+                        <label>이미지</label>
+                        <div class="file-row">
+                            <label for="post-image" class="file-button">파일 선택</label>
+                            <span id="file-name">파일을 선택해주세요.</span>
+                            <input type="file" id="post-image" accept="image/*" multiple hidden>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-button" disabled>
+                        모집 등록
+                    </button>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

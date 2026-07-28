@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 수정</title>
+    <link rel="stylesheet" href="./css/post-edit.css">
+    <link rel="stylesheet" href="./css/profile-menu.css">
+    <link rel="stylesheet" href="./css/navigation.css">
+    <script src="./js/api.js" defer></script>
+    <script src="./js/profile-menu.js" defer></script>
+    <script src="./js/navigation.js" defer></script>
+    <script src="./js/post-edit.js" defer></script>
+</head>
+<body>
+    <div class="page">
+        <header class="header">
+            <button type="button" class="back-button" id="back-button">‹</button>
+            <h1 id="main-logo">Gourmet</h1>
+            <div class="profile-menu-wrapper">
+                <button type="button" class="profile-button" id="header-profile-button"></button>
+
+                <ul class="profile-dropdown" id="profile-dropdown">
+                    <li id="go-edit-profile">회원정보수정</li>
+                    <li id="go-edit-password">비밀번호수정</li>
+                    <li id="logout-button">로그아웃</li>
+                </ul>
+            </div>
+        </header>
+
+        <main class="main">
+            <section class="post-edit-box">
+                <h2>게시글 수정</h2>
+
+                <form id="post-edit-form" novalidate>
+                    <div class="input-group">
+                        <label for="title">제목*</label>
+                        <input
+                            type="text"
+                            id="title"
+                            maxlength="26"
+                            value="제목 1"
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label for="content">내용*</label>
+                        <textarea id="content"></textarea>
+                    </div>
+
+                    <p class="helper-text" id="form-helper"></p>
+
+                    <div class="image-group">
+                        <label>이미지</label>
+                        <div class="file-row">
+                            <label for="post-image" class="file-button">파일 선택</label>
+                            <span id="file-name">기존 파일 명</span>
+                            <input type="file" id="post-image" accept="image/*" multiple hidden>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-button" class="active">
+                        수정하기
+                    </button>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

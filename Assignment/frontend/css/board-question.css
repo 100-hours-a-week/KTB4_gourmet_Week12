@@ -1,0 +1,39 @@
+.board-question .intro-eyebrow {
+    color: var(--gc-accent-warm);
+}
+
+.qa-tip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding: 14px 16px;
+    border: 1px solid var(--gc-sage-soft);
+    background: rgba(45, 79, 54, 0.35);
+}
+
+.qa-mark {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gc-sage);
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gc-cream);
+}
+
+.qa-tip p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--gc-cream-muted);
+}
+
+.board-question .post-badge {
+    color: var(--gc-cream);
+    border-color: var(--gc-accent-warm);
+}

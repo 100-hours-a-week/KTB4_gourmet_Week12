@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 · Gourmet Community</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/signup.css">
+    <script src="./js/api.js" defer></script>
+    <script src="./js/signup.js" defer></script>
+</head>
+<body>
+    <div class="page">
+        <div class="atmosphere" aria-hidden="true"></div>
+
+        <main class="main">
+            <section class="signup-box">
+                <header class="brand">
+                    <button type="button" class="back-button" id="back-button" aria-label="로그인으로 돌아가기">
+                        ‹
+                    </button>
+                    <img
+                        class="brand-logo"
+                        src="./gourmet_community_logo.png"
+                        alt="Gourmet Community"
+                        width="120"
+                        height="120"
+                    >
+                    <p class="brand-tagline">개발 학습 커뮤니티</p>
+                </header>
+
+                <h2 class="auth-title">회원가입</h2>
+                <p class="auth-subtitle">Gourmet Community에 합류하세요</p>
+
+                <form id="signup-form" novalidate>
+                    <div class="profile-area">
+                        <label class="input-label">프로필 사진</label>
+                        <p class="helper-text" id="profile-helper"></p>
+
+                        <label for="profile-image" class="profile-preview" id="profile-preview">
+                            <span id="profile-plus">+</span>
+                            <img id="profile-img" alt="프로필 미리보기">
+                        </label>
+
+                        <input
+                            type="file"
+                            id="profile-image"
+                            accept="image/*"
+                            hidden
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">이메일*</label>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="이메일을 입력하세요"
+                            autocomplete="email"
+                        >
+                        <p class="helper-text" id="email-helper"></p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">비밀번호*</label>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="비밀번호를 입력하세요"
+                            autocomplete="new-password"
+                        >
+                        <p class="helper-text" id="password-helper"></p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password-check">비밀번호 확인*</label>
+                        <input
+                            type="password"
+                            id="password-check"
+                            placeholder="비밀번호를 한번 더 입력하세요"
+                            autocomplete="new-password"
+                        >
+                        <p class="helper-text" id="password-check-helper"></p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="nickname">닉네임*</label>
+                        <input
+                            type="text"
+                            id="nickname"
+                            placeholder="닉네임을 입력하세요"
+                            maxlength="10"
+                            autocomplete="nickname"
+                        >
+                        <p class="helper-text" id="nickname-helper"></p>
+                    </div>
+
+                    <button type="submit" id="signup-button" disabled>
+                        회원가입
+                    </button>
+                </form>
+
+                <p class="auth-footer">
+                    이미 계정이 있으신가요?
+                    <button type="button" id="login-button" class="login-button">
+                        로그인하러 가기
+                    </button>
+                </p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

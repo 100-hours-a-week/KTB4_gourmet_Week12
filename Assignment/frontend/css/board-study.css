@@ -1,0 +1,34 @@
+.board-study .intro-title {
+    font-style: italic;
+}
+
+.study-ornament {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    color: var(--gc-cream-dim);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-style: italic;
+    letter-spacing: 0.16em;
+}
+
+.study-ornament span:first-child,
+.study-ornament span:last-child {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gc-sage-soft), transparent);
+}
+
+.board-study .post-card {
+    background: linear-gradient(
+        180deg,
+        rgba(45, 79, 54, 0.28) 0%,
+        rgba(26, 46, 32, 0.7) 100%
+    );
+}
+
+.board-study .post-badge {
+    letter-spacing: 0.14em;
+}

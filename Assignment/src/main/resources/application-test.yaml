@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:community;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  secret: test-jwt-secret-key-for-gourmet-community-application
+  access-token-exp-seconds: 1800
+  refresh-token-exp-seconds: 1209600
