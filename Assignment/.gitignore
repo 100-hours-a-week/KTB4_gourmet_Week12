@@ -46,6 +46,6 @@ uploads/
 !upload/.gitkeep
 
 ### Local Spring Configuration ###
-Assignment/src/main/resources/application-local.yaml
-Assignment/src/main/resources/application-secret.yaml
-Assignment/src/main/resources/application-secret.yml
+src/main/resources/application-local.yaml
+src/main/resources/application-secret.yaml
+src/main/resources/application-secret.yml
