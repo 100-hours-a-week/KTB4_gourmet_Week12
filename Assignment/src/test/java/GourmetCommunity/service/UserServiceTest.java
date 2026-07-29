@@ -252,7 +252,8 @@ class UserServiceTest {
         UserPasswordUpdateRequestDto request =
                 mock(UserPasswordUpdateRequestDto.class);
 
-        when(request.getPassword()).thenReturn("New1234!");
+        when(request.getCurrentPassword()).thenReturn("Old1234!");
+        when(request.getNewPassword()).thenReturn("New1234!");
 
         when(userRepository.findById(1L))
                 .thenReturn(Optional.of(user));
