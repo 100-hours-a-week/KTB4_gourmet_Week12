@@ -1,3 +1,5 @@
+name: gourmet-community
+
 services:
   db:
     image: mysql:8.0
