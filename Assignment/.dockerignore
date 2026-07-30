@@ -1,0 +1,13 @@
+.git
+.idea
+.gradle
+build
+frontend-react
+uploads
+
+.env
+*.iml
+
+src/main/resources/application-local.yaml
+src/main/resources/application-secret.yaml
+src/main/resources/application-secret.yml
