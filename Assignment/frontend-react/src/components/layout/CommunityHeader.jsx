@@ -9,11 +9,21 @@ import {
     useNavigate
 } from "react-router";
 
-import useAuth from "../../hooks/useAuth.js";
+import FriendShortcutButton
+    from "../friend/FriendShortcutButton.jsx";
+
+import NotificationBell
+    from "../notification/NotificationBell.jsx";
+
+import useAuth
+    from "../../hooks/useAuth.js";
 
 import {
     resolveAssetUrl
 } from "../../utils/assetUrl.js";
+
+import ChatShortcutButton
+    from "../chat/ChatShortcutButton.jsx";
 
 function CommunityHeader({
     isSidebarOpen,
@@ -21,7 +31,8 @@ function CommunityHeader({
 }) {
     const navigate = useNavigate();
 
-    const profileMenuRef = useRef(null);
+    const profileMenuRef =
+        useRef(null);
 
     const {
         currentUser,
@@ -44,14 +55,17 @@ function CommunityHeader({
     ] = useState(false);
 
     useEffect(function () {
-        function handleOutsideClick(event) {
+        function handleOutsideClick(
+            event
+        ) {
             if (
-                profileMenuRef.current &&
-                !profileMenuRef.current.contains(
-                    event.target
-                )
+                profileMenuRef.current
+                && !profileMenuRef.current
+                    .contains(event.target)
             ) {
-                setIsProfileMenuOpen(false);
+                setIsProfileMenuOpen(
+                    false
+                );
             }
         }
 
@@ -68,7 +82,9 @@ function CommunityHeader({
         };
     }, []);
 
-    function handleSearchSubmit(event) {
+    function handleSearchSubmit(
+        event
+    ) {
         event.preventDefault();
 
         const keyword =
@@ -78,17 +94,25 @@ function CommunityHeader({
             return;
         }
 
-        const query = new URLSearchParams({
-            keyword,
-            searchType: "ALL",
-            sortType: "LATEST",
-            page: "0",
-            size: "10"
-        });
+        const query =
+            new URLSearchParams({
+                keyword,
+                searchType: "ALL",
+                sortType: "LATEST",
+                page: "0",
+                size: "10"
+            });
 
         navigate(
             `/search?${query.toString()}`
         );
+    }
+
+    function closeProfileMenuAndNavigate(
+        path
+    ) {
+        setIsProfileMenuOpen(false);
+        navigate(path);
     }
 
     async function handleLogout() {
@@ -101,11 +125,12 @@ function CommunityHeader({
         try {
             await signOut();
 
+            setIsProfileMenuOpen(false);
+
             navigate(
                 "/login",
                 {
                     replace: true,
-
                     state: {
                         notice:
                             "로그아웃되었습니다."
@@ -119,8 +144,8 @@ function CommunityHeader({
             );
 
             alert(
-                error?.message ??
-                "로그아웃에 실패했습니다."
+                error?.message
+                ?? "로그아웃에 실패했습니다."
             );
         } finally {
             setIsLoggingOut(false);
@@ -128,7 +153,8 @@ function CommunityHeader({
     }
 
     const nickname =
-        currentUser?.nickname || "회원";
+        currentUser?.nickname
+        || "회원";
 
     const profileImage =
         resolveAssetUrl(
@@ -156,10 +182,14 @@ function CommunityHeader({
             <Link
                 to="/boards/free"
                 className="community-logo"
-                aria-label="Gourmet Community 홈"
+                aria-label={
+                    "Gourmet Community 홈"
+                }
             >
                 <img
-                    src="/images/gourmet-logo.png"
+                    src={
+                        "/images/gourmet-logo.png"
+                    }
                     alt="Gourmet Community"
                 />
             </Link>
@@ -167,27 +197,37 @@ function CommunityHeader({
             <form
                 className="community-search"
                 role="search"
-                onSubmit={handleSearchSubmit}
+                onSubmit={
+                    handleSearchSubmit
+                }
             >
                 <label
                     className="visually-hidden"
-                    htmlFor="community-search-input"
+                    htmlFor={
+                        "community-search-input"
+                    }
                 >
                     통합 검색
                 </label>
 
                 <input
                     type="search"
-                    id="community-search-input"
+                    id={
+                        "community-search-input"
+                    }
                     value={searchKeyword}
-                    placeholder="게시글 통합 검색"
+                    placeholder={
+                        "게시글 통합 검색"
+                    }
                     autoComplete="off"
                     maxLength={100}
-                    onChange={function (event) {
-                        setSearchKeyword(
-                            event.target.value
-                        );
-                    }}
+                    onChange={
+                        function (event) {
+                            setSearchKeyword(
+                                event.target.value
+                            );
+                        }
+                    }
                 />
 
                 <button type="submit">
@@ -196,96 +236,147 @@ function CommunityHeader({
             </form>
 
             <div
-                className="community-profile"
-                ref={profileMenuRef}
-            >
-                <button
-                    type="button"
-                    className="community-profile-button"
-                    aria-label="프로필 메뉴"
-                    aria-expanded={isProfileMenuOpen}
-                    onClick={function () {
-                        setIsProfileMenuOpen(
-                            function (current) {
-                                return !current;
-                            }
-                        );
-                    }}
-                >
-                    {
-                        profileImage
-                            ? (
-                                <img
-                                    src={profileImage}
-                                    alt=""
-                                />
-                            )
-                            : (
-                                <span aria-hidden="true">
-                                    {
-                                        nickname
-                                            .charAt(0)
-                                            .toUpperCase()
-                                    }
-                                </span>
-                            )
-                    }
-                </button>
-
-                {
-                    isProfileMenuOpen && (
-                        <div
-                            className="community-profile-menu"
-                            role="menu"
-                        >
-                            <p className="profile-menu-user">
-                                <strong>{nickname}</strong>
-                                <span>
-                                    {currentUser?.email ?? ""}
-                                </span>
-                            </p>
-
-                            <button
-                                type="button"
-                                role="menuitem"
-                                onClick={function () {
-                                    navigate("/profile/edit");
-                                    setIsProfileMenuOpen(false);
-                                }}
-                            >
-                                회원정보 수정
-                            </button>
-
-                            <button
-                                type="button"
-                                role="menuitem"
-                                onClick={function () {
-                                    navigate(
-                                        "/profile/password"
-                                    );
-
-                                    setIsProfileMenuOpen(false);
-                                }}
-                            >
-                                비밀번호 수정
-                            </button>
-
-                            <button
-                                type="button"
-                                role="menuitem"
-                                className="logout-menu-button"
-                                disabled={isLoggingOut}
-                                onClick={handleLogout}
-                            >
-                                {
-                                    isLoggingOut
-                                        ? "로그아웃 중"
-                                        : "로그아웃"
-                                }
-                            </button>
-                        </div>
-                    )
+                className={
+                    "header-user-actions"
                 }
+            >
+                <FriendShortcutButton />
+                <ChatShortcutButton />
+                <NotificationBell />
+
+                <div
+                    className={
+                        "community-profile"
+                    }
+                    ref={profileMenuRef}
+                >
+                    <button
+                        type="button"
+                        className={
+                            "community-profile-button"
+                        }
+                        aria-label={
+                            "프로필 메뉴"
+                        }
+                        aria-expanded={
+                            isProfileMenuOpen
+                        }
+                        onClick={
+                            function () {
+                                setIsProfileMenuOpen(
+                                    function (
+                                        current
+                                    ) {
+                                        return !current;
+                                    }
+                                );
+                            }
+                        }
+                    >
+                        {
+                            profileImage
+                                ? (
+                                    <img
+                                        src={
+                                            profileImage
+                                        }
+                                        alt=""
+                                    />
+                                )
+                                : (
+                                    <span
+                                        aria-hidden={
+                                            "true"
+                                        }
+                                    >
+                                        {
+                                            nickname
+                                                .charAt(0)
+                                                .toUpperCase()
+                                        }
+                                    </span>
+                                )
+                        }
+                    </button>
+
+                    {
+                        isProfileMenuOpen
+                        && (
+                            <div
+                                className={
+                                    "community-profile-menu"
+                                }
+                                role="menu"
+                            >
+                                <p
+                                    className={
+                                        "profile-menu-user"
+                                    }
+                                >
+                                    <strong>
+                                        {nickname}
+                                    </strong>
+
+                                    <span>
+                                        {
+                                            currentUser
+                                                ?.email
+                                            ?? ""
+                                        }
+                                    </span>
+                                </p>
+
+                                <button
+                                    type="button"
+                                    role="menuitem"
+                                    onClick={
+                                        function () {
+                                            closeProfileMenuAndNavigate(
+                                                "/profile/edit"
+                                            );
+                                        }
+                                    }
+                                >
+                                    회원정보 수정
+                                </button>
+
+                                <button
+                                    type="button"
+                                    role="menuitem"
+                                    onClick={
+                                        function () {
+                                            closeProfileMenuAndNavigate(
+                                                "/profile/password"
+                                            );
+                                        }
+                                    }
+                                >
+                                    비밀번호 수정
+                                </button>
+
+                                <button
+                                    type="button"
+                                    role="menuitem"
+                                    className={
+                                        "logout-menu-button"
+                                    }
+                                    disabled={
+                                        isLoggingOut
+                                    }
+                                    onClick={
+                                        handleLogout
+                                    }
+                                >
+                                    {
+                                        isLoggingOut
+                                            ? "로그아웃 중"
+                                            : "로그아웃"
+                                    }
+                                </button>
+                            </div>
+                        )
+                    }
+                </div>
             </div>
         </header>
     );

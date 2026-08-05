@@ -1,0 +1,72 @@
+.chat-shortcut-button {
+    position: relative;
+
+    width: 40px;
+    height: 40px;
+
+    flex: 0 0 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        var(--gc-sage-soft);
+
+    border-radius: 50%;
+
+    background:
+        var(--gc-field);
+
+    color:
+        var(--gc-cream-muted);
+}
+
+.chat-shortcut-button:hover,
+.chat-shortcut-button:focus-visible,
+.chat-shortcut-button.is-active {
+    border-color:
+        var(--gc-sage);
+
+    background:
+        rgba(92, 132, 87, 0.3);
+
+    color:
+        var(--gc-cream);
+}
+
+.chat-shortcut-icon {
+    width: 21px;
+    height: 21px;
+}
+
+.chat-shortcut-badge {
+    position: absolute;
+    top: -5px;
+    right: -6px;
+
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border:
+        2px solid
+        var(--gc-forest-deep);
+
+    border-radius: 999px;
+
+    background: #e17970;
+    color: #ffffff;
+
+    font-size: 9px;
+    font-weight: 900;
+}

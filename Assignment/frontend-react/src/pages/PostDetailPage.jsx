@@ -91,68 +91,86 @@ function PostDetailPage() {
     const numericPostId =
         Number(postId);
 
-    useEffect(function () {
-        if (
-            !Number.isInteger(numericPostId) ||
-            numericPostId < 1
-        ) {
-            setError(
-                "올바르지 않은 게시글 번호입니다."
+useEffect(function () {
+    if (
+        !Number.isInteger(numericPostId)
+        || numericPostId < 1
+    ) {
+        setError(
+            "올바르지 않은 게시글 번호입니다."
+        );
+
+        setIsLoading(false);
+
+        return undefined;
+    }
+
+    const controller =
+        new AbortController();
+
+    /*
+     * abort() 이후 이미 실행 중이던 Promise의
+     * finally가 상태를 바꾸지 못하게 한다.
+     */
+    let active = true;
+
+    async function loadPostDetail() {
+        setIsLoading(true);
+        setError("");
+
+        try {
+            const data =
+                await getPostDetail(
+                    numericPostId,
+                    controller.signal
+                );
+
+            if (!active) {
+                return;
+            }
+
+            setPost(data);
+
+            setCommentCount(
+                Number(
+                    data.commentCount ?? 0
+                )
+            );
+        } catch (requestError) {
+            if (
+                !active
+                || requestError.name
+                    === "AbortError"
+            ) {
+                return;
+            }
+
+            console.error(
+                "게시글 상세 조회 오류:",
+                requestError
             );
 
-            setIsLoading(false);
-            return undefined;
-        }
-
-        const controller =
-            new AbortController();
-
-        async function loadPostDetail() {
-            setIsLoading(true);
-            setError("");
-
-            try {
-                const data =
-                    await getPostDetail(
-                        numericPostId,
-                        controller.signal
-                    );
-
-                setPost(data);
-
-                setCommentCount(
-                    Number(
-                        data.commentCount ?? 0
-                    )
-                );
-            } catch (requestError) {
-                if (
-                    requestError.name ===
-                    "AbortError"
-                ) {
-                    return;
-                }
-
-                console.error(
-                    "게시글 상세 조회 오류:",
-                    requestError
-                );
-
-                setError(
-                    requestError?.message ??
-                    "게시글을 불러오지 못했습니다."
-                );
-            } finally {
+            setError(
+                requestError?.message
+                ?? "게시글을 불러오지 못했습니다."
+            );
+        } finally {
+            /*
+             * 현재 활성 요청만 로딩 상태를 종료한다.
+             */
+            if (active) {
                 setIsLoading(false);
             }
         }
+    }
 
-        loadPostDetail();
+    loadPostDetail();
 
-        return function () {
-            controller.abort();
-        };
-    }, [numericPostId]);
+    return function () {
+        active = false;
+        controller.abort();
+    };
+}, [numericPostId]);
 
     useEffect(function () {
         if (post?.title) {

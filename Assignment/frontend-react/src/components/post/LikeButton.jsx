@@ -4,8 +4,9 @@ import {
 } from "react";
 
 import {
+    addPostLike,
     getLikeStatus,
-    togglePostLike
+    removePostLike
 } from "../../api/likeApi.js";
 
 import {
@@ -53,7 +54,6 @@ function LikeButton({
                 const data =
                     await getLikeStatus(
                         postId,
-                        userId,
                         controller.signal
                     );
 
@@ -91,11 +91,11 @@ function LikeButton({
         userId
     ]);
 
-    async function handleToggleLike() {
+    async function handleLikeClick() {
         if (
-            isProcessing ||
-            !postId ||
-            !userId
+            isProcessing
+            || !postId
+            || !userId
         ) {
             return;
         }
@@ -103,18 +103,23 @@ function LikeButton({
         setIsProcessing(true);
 
         try {
+            /*
+             * 현재 화면 상태에 따라 원하는 최종 상태를
+             * 서버에 명확하게 요청한다.
+             */
             const data =
-                await togglePostLike(
-                    postId,
-                    userId
-                );
+                liked
+                    ? await removePostLike(postId)
+                    : await addPostLike(postId);
 
             setLiked(
-                Boolean(data.liked)
+                Boolean(data?.liked)
             );
 
             setLikeCount(
-                Number(data.likeCount ?? 0)
+                Number(
+                    data?.likeCount ?? 0
+                )
             );
         } catch (error) {
             console.error(
@@ -123,9 +128,33 @@ function LikeButton({
             );
 
             alert(
-                error?.message ??
-                "좋아요 처리에 실패했습니다."
+                error?.message
+                ?? "좋아요 처리에 실패했습니다."
             );
+
+            /*
+             * 요청 실패 시 화면 상태를 서버 기준으로
+             * 다시 동기화한다.
+             */
+            try {
+                const current =
+                    await getLikeStatus(postId);
+
+                setLiked(
+                    Boolean(current?.liked)
+                );
+
+                setLikeCount(
+                    Number(
+                        current?.likeCount ?? 0
+                    )
+                );
+            } catch (syncError) {
+                console.error(
+                    "좋아요 상태 재동기화 오류:",
+                    syncError
+                );
+            }
         } finally {
             setIsProcessing(false);
         }
@@ -147,8 +176,11 @@ function LikeButton({
                     : "좋아요"
             }
             aria-pressed={liked}
-            disabled={isProcessing}
-            onClick={handleToggleLike}
+            disabled={
+                isProcessing
+                || !userId
+            }
+            onClick={handleLikeClick}
         >
             <span
                 className="detail-like-icon"
@@ -161,7 +193,13 @@ function LikeButton({
                 {formatCount(likeCount)}
             </strong>
 
-            <span>좋아요</span>
+            <span>
+                {
+                    isProcessing
+                        ? "처리 중"
+                        : "좋아요"
+                }
+            </span>
         </button>
     );
 }

@@ -27,6 +27,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public CommentResponseDto createComment(Long postId, CommentCreateRequestDto request) {
@@ -45,6 +46,12 @@ public class CommentService {
         );
 
         Comment savedComment = commentRepository.save(comment);
+
+        notificationService.createCommentNotification(
+                post,
+                user,
+                savedComment
+        );
 
         return new CommentResponseDto(savedComment);
     }
@@ -89,6 +96,8 @@ public class CommentService {
 
         validateCommentBelongsToPost(comment, postId);
         SecurityUtil.validateLoginUser(comment.getUserId());
+
+        notificationService.deleteCommentNotification(commentId);
 
         commentRepository.delete(comment);
     }

@@ -11,19 +11,36 @@ public class PostLikeController {
 
     private final PostLikeService postLikeService;
 
-    @GetMapping("/posts/{postId}/likes/users/{userId}")
+    /**
+     * 로그인 사용자의 좋아요 상태 조회
+     */
+    @GetMapping("/posts/{postId}/likes")
     public PostLikeResponseDto getLikeStatus(
-            @PathVariable Long postId,
-            @PathVariable Long userId
+            @PathVariable Long postId
     ) {
-        return postLikeService.getLikeStatus(postId, userId);
+        return postLikeService
+                .getLikeStatus(postId);
     }
 
-    @PostMapping("/posts/{postId}/likes/users/{userId}")
-    public PostLikeResponseDto toggleLike(
-            @PathVariable Long postId,
-            @PathVariable Long userId
+    /**
+     * 게시글을 좋아요 상태로 만든다.
+     */
+    @PostMapping("/posts/{postId}/likes")
+    public PostLikeResponseDto addLike(
+            @PathVariable Long postId
     ) {
-        return postLikeService.toggleLike(postId, userId);
+        return postLikeService
+                .addLike(postId);
+    }
+
+    /**
+     * 게시글을 좋아요하지 않은 상태로 만든다.
+     */
+    @DeleteMapping("/posts/{postId}/likes")
+    public PostLikeResponseDto removeLike(
+            @PathVariable Long postId
+    ) {
+        return postLikeService
+                .removeLike(postId);
     }
 }

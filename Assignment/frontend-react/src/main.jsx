@@ -3,7 +3,12 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 
 import App from "./App.jsx";
-import AuthProvider from "./contexts/AuthProvider.jsx";
+
+import AuthProvider
+    from "./contexts/AuthProvider.jsx";
+
+import ChatProvider
+    from "./contexts/ChatProvider.jsx";
 
 import "./styles/global.css";
 
@@ -13,7 +18,9 @@ createRoot(
     <StrictMode>
         <BrowserRouter>
             <AuthProvider>
-                <App />
+                <ChatProvider>
+                    <App />
+                </ChatProvider>
             </AuthProvider>
         </BrowserRouter>
     </StrictMode>

@@ -1,3 +1,9 @@
+import ChatRoomsPage from
+    "./pages/ChatRoomsPage.jsx";
+
+import ChatRoomPage from
+    "./pages/ChatRoomPage.jsx";
+
 import PasswordChangePage from
     "./pages/PasswordChangePage.jsx";
 
@@ -19,23 +25,38 @@ import ProjectCreatePage from
 import PostDetailPage from
     "./pages/PostDetailPage.jsx";
 
+import FriendsPage from
+    "./pages/FriendsPage.jsx";
+
 import {
     Navigate,
     Route,
     Routes
 } from "react-router";
 
+import AuthLayout from
+    "./layouts/AuthLayout.jsx";
 
-import AuthLayout from "./layouts/AuthLayout.jsx";
-import CommunityLayout from "./layouts/CommunityLayout.jsx";
+import CommunityLayout from
+    "./layouts/CommunityLayout.jsx";
 
-import BoardPage from "./pages/BoardPage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-import NotFoundPage from "./pages/NotFoundPage.jsx";
-import SignupPage from "./pages/SignupPage.jsx";
+import BoardPage from
+    "./pages/BoardPage.jsx";
 
-import ProtectedRoute from "./routes/ProtectedRoute.jsx";
-import PublicOnlyRoute from "./routes/PublicOnlyRoute.jsx";
+import LoginPage from
+    "./pages/LoginPage.jsx";
+
+import NotFoundPage from
+    "./pages/NotFoundPage.jsx";
+
+import SignupPage from
+    "./pages/SignupPage.jsx";
+
+import ProtectedRoute from
+    "./routes/ProtectedRoute.jsx";
+
+import PublicOnlyRoute from
+    "./routes/PublicOnlyRoute.jsx";
 
 function App() {
     return (
@@ -94,6 +115,22 @@ function App() {
                     <Route
                         path="/search"
                         element={<SearchPage />}
+                    />
+
+                    <Route
+                        path="/friends"
+                        element={<FriendsPage />}
+                    />
+
+                    <Route
+                        path="/chats"
+                        element={<ChatRoomsPage />}
+                    />
+
+
+                    <Route
+                        path="/chats/:roomId"
+                        element={<ChatRoomPage />}
                     />
 
                     <Route

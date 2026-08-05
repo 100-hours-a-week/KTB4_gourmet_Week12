@@ -235,3 +235,35 @@ export async function updatePost({
 
     return data;
 }
+
+export async function getPopularPosts({
+    limit = 5,
+    signal
+} = {}) {
+    const query =
+        new URLSearchParams({
+            limit: String(limit)
+        });
+
+    const response = await fetch(
+        `/api/posts/popular?${query.toString()}`,
+        {
+            method: "GET",
+            credentials: "include",
+            signal
+        }
+    );
+
+    const data =
+        await readResponseBody(response);
+
+    if (!response.ok) {
+        throw createPostRequestError(
+            response,
+            data,
+            "인기 게시글을 불러오지 못했습니다."
+        );
+    }
+
+    return data;
+}

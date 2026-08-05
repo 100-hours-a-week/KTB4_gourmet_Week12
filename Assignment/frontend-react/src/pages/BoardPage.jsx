@@ -1,6 +1,7 @@
 import {
     useEffect,
-    useRef
+    useRef,
+    useState
 } from "react";
 
 import {
@@ -9,8 +10,15 @@ import {
     useParams
 } from "react-router";
 
+import PopularPostList from
+    "../components/post/PopularPostList.jsx";
+
 import PostCard from
     "../components/post/PostCard.jsx";
+
+import {
+    getPopularPosts
+} from "../api/postApi.js";
 
 import {
     getBoardConfig
@@ -22,6 +30,21 @@ import useBoardPosts from
 function ValidBoardPage({ board }) {
     const loadMoreTarget =
         useRef(null);
+
+    const [
+        popularPosts,
+        setPopularPosts
+    ] = useState([]);
+
+    const [
+        isPopularLoading,
+        setIsPopularLoading
+    ] = useState(true);
+
+    const [
+        popularError,
+        setPopularError
+    ] = useState("");
 
     const {
         posts,
@@ -37,6 +60,59 @@ function ValidBoardPage({ board }) {
         document.title =
             `${board.title} · Gourmet Community`;
     }, [board.title]);
+
+    useEffect(function () {
+        const controller =
+            new AbortController();
+
+        async function loadPopularPosts() {
+            setIsPopularLoading(true);
+            setPopularError("");
+
+            try {
+                const response =
+                    await getPopularPosts({
+                        limit: 5,
+                        signal:
+                            controller.signal
+                    });
+
+                setPopularPosts(
+                    Array.isArray(response)
+                        ? response
+                        : []
+                );
+            } catch (requestError) {
+                if (
+                    requestError.name
+                    === "AbortError"
+                ) {
+                    return;
+                }
+
+                setPopularError(
+                    requestError.message
+                    || "인기 게시글을 불러오지 못했습니다."
+                );
+            } finally {
+                if (
+                    !controller
+                        .signal
+                        .aborted
+                ) {
+                    setIsPopularLoading(
+                        false
+                    );
+                }
+            }
+        }
+
+        loadPopularPosts();
+
+        return function () {
+            controller.abort();
+        };
+    }, []);
 
     useEffect(function () {
         const target =
@@ -96,6 +172,12 @@ function ValidBoardPage({ board }) {
                     {board.description}
                 </p>
             </section>
+
+            <PopularPostList
+                items={popularPosts}
+                isLoading={isPopularLoading}
+                error={popularError}
+            />
 
             <section className="board-action">
                 <h2>{board.listTitle}</h2>

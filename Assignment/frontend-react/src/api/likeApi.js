@@ -21,15 +21,18 @@ function createLikeRequestError(
     return error;
 }
 
-export async function getLikeStatus(
+async function requestLikeApi(
     postId,
-    userId,
-    signal
+    {
+        method,
+        signal,
+        fallbackMessage
+    }
 ) {
     const response = await fetch(
-        `/api/posts/${postId}/likes/users/${userId}`,
+        `/api/posts/${postId}/likes`,
         {
-            method: "GET",
+            method,
             credentials: "include",
             signal
         }
@@ -42,35 +45,46 @@ export async function getLikeStatus(
         throw createLikeRequestError(
             response,
             data,
-            "좋아요 상태를 불러오지 못했습니다."
+            fallbackMessage
         );
     }
 
     return data;
 }
 
-export async function togglePostLike(
+export function getLikeStatus(
     postId,
-    userId
+    signal
 ) {
-    const response = await fetch(
-        `/api/posts/${postId}/likes/users/${userId}`,
+    return requestLikeApi(
+        postId,
         {
-            method: "POST",
-            credentials: "include"
+            method: "GET",
+            signal,
+            fallbackMessage:
+                "좋아요 상태를 불러오지 못했습니다."
         }
     );
+}
 
-    const data =
-        await readResponseBody(response);
+export function addPostLike(postId) {
+    return requestLikeApi(
+        postId,
+        {
+            method: "POST",
+            fallbackMessage:
+                "좋아요 등록에 실패했습니다."
+        }
+    );
+}
 
-    if (!response.ok) {
-        throw createLikeRequestError(
-            response,
-            data,
-            "좋아요 처리에 실패했습니다."
-        );
-    }
-
-    return data;
+export function removePostLike(postId) {
+    return requestLikeApi(
+        postId,
+        {
+            method: "DELETE",
+            fallbackMessage:
+                "좋아요 취소에 실패했습니다."
+        }
+    );
 }

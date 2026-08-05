@@ -15,8 +15,17 @@ export default defineConfig({
                 target: "http://localhost:8080",
                 changeOrigin: true,
 
+                /*
+                 * /api/ws/chat WebSocket Upgrade 요청도
+                 * Spring 서버로 전달한다.
+                 */
+                ws: true,
+
                 rewrite: function (path) {
-                    return path.replace(/^\/api/, "");
+                    return path.replace(
+                        /^\/api/,
+                        ""
+                    );
                 }
             },
 

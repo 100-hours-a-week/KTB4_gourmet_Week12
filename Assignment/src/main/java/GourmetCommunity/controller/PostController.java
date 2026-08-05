@@ -6,6 +6,9 @@ import GourmetCommunity.dto.PostResponseDto;
 import GourmetCommunity.dto.PostUpdateRequestDto;
 import GourmetCommunity.service.PostService;
 import GourmetCommunity.entity.BoardType;
+import GourmetCommunity.dto.PopularPostResponseDto;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +81,24 @@ public class PostController {
                 page,
                 size
         );
+    }
+
+    @GetMapping("/posts/popular")
+    public List<PopularPostResponseDto>
+    getPopularPosts(
+            @RequestParam(defaultValue = "5")
+            @Min(
+                    value = 1,
+                    message = "limit must be at least 1"
+            )
+            @Max(
+                    value = 10,
+                    message = "limit must be 10 or less"
+            )
+            int limit
+    ) {
+        return postService
+                .getPopularPosts(limit);
     }
 
     @GetMapping("/posts/{postId}")

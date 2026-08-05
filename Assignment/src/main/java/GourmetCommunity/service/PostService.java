@@ -19,6 +19,16 @@ import GourmetCommunity.repository.UserRepository;
 import GourmetCommunity.auth.SecurityUtil;
 import GourmetCommunity.entity.BoardType;
 import GourmetCommunity.service.assembler.PostResponseAssembler;
+import GourmetCommunity.dto.PopularPostResponseDto;
+import GourmetCommunity.repository.projection.PopularPostRankingProjection;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import jakarta.persistence.EntityManager;
+
 import org.springframework.data.domain.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,8 +37,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +51,7 @@ public class PostService {
     private final PostViewRepository postViewRepository;
     private final FileStorageService fileStorageService;
     private final PostResponseAssembler postResponseAssembler;
+    private final EntityManager entityManager;
 
     @Transactional
     public PostResponseDto createPost(
@@ -131,19 +140,146 @@ public class PostService {
         );
     }
 
-    @Transactional
-    public PostResponseDto getPost(Long postId) {
-        Post post = findPostById(postId);
-
-        SecurityUtil.getOptionalLoginUserId()
-                .ifPresent(userId ->
-                        increaseViewCountIfFirstView(
-                                post,
-                                userId
-                        )
+    public List<PopularPostResponseDto> getPopularPosts(
+            int limit
+    ) {
+        int safeLimit =
+                Math.max(
+                        1,
+                        Math.min(limit, 10)
                 );
 
-        return postResponseAssembler.toDto(post);
+        LocalDateTime since =
+                LocalDateTime.now()
+                        .minusDays(7);
+
+        Pageable pageable =
+                PageRequest.of(
+                        0,
+                        safeLimit
+                );
+
+        List<PopularPostRankingProjection> rankings =
+                postRepository
+                        .findPopularPostRankings(
+                                since,
+                                pageable
+                        );
+
+        if (rankings.isEmpty()) {
+            return List.of();
+        }
+
+        List<Long> postIds =
+                rankings.stream()
+                        .map(
+                                PopularPostRankingProjection
+                                        ::getPostId
+                        )
+                        .toList();
+
+        List<Post> fetchedPosts =
+                postRepository
+                        .findAllByIdIn(postIds);
+
+        Map<Long, Post> postMap =
+                new HashMap<>();
+
+        for (Post post : fetchedPosts) {
+            postMap.put(
+                    post.getId(),
+                    post
+            );
+        }
+
+        /*
+         * findAllByIdIn은 DB 반환 순서를 보장하지 않으므로
+         * 순위 조회 결과의 ID 순서로 다시 정렬한다.
+         */
+        List<Post> orderedPosts =
+                new ArrayList<>();
+
+        for (
+                PopularPostRankingProjection ranking
+                : rankings
+        ) {
+            Post post =
+                    postMap.get(
+                            ranking.getPostId()
+                    );
+
+            if (post != null) {
+                orderedPosts.add(post);
+            }
+        }
+
+        List<PostResponseDto> postResponses =
+                postResponseAssembler
+                        .toDtos(orderedPosts);
+
+        List<PopularPostResponseDto> responses =
+                new ArrayList<>(
+                        postResponses.size()
+                );
+
+        for (
+                int index = 0;
+                index < postResponses.size();
+                index++
+        ) {
+            responses.add(
+                    new PopularPostResponseDto(
+                            index + 1,
+                            postResponses.get(index)
+                    )
+            );
+        }
+
+        return responses;
+    }
+
+    @Transactional
+    public PostResponseDto getPost(
+            Long postId
+    ) {
+        Long loginUserId =
+                SecurityUtil
+                        .getOptionalLoginUserId()
+                        .orElse(null);
+
+        /*
+         * 로그인 사용자라면 게시글을 조회하기 전에
+         * 사용자 행부터 잠근다.
+         *
+         * 같은 사용자의 중복 요청은 여기서부터
+         * 한 요청씩 순서대로 처리된다.
+         */
+        User lockedViewer = null;
+
+        if (loginUserId != null) {
+            lockedViewer =
+                    findActiveUserForUpdate(
+                            loginUserId
+                    );
+        }
+
+        /*
+         * 사용자 잠금 이후 게시글을 조회해야
+         * 대기 중이던 두 번째 트랜잭션이 앞선 요청의
+         * 최신 Commit 상태를 기준으로 동작한다.
+         */
+        Post post =
+                findPostById(postId);
+
+        if (lockedViewer != null) {
+            increaseViewCountIfFirstView(
+                    post,
+                    lockedViewer
+            );
+        }
+
+        return postResponseAssembler
+                .toDto(post);
     }
 
     @Transactional
@@ -204,103 +340,86 @@ public class PostService {
         return images.stream().anyMatch(image -> image != null && !image.isEmpty());
     }
 
+    private User findActiveUserForUpdate(
+            Long userId
+    ) {
+        User user =
+                userRepository
+                        .findByIdForUpdate(userId)
+                        .orElseThrow(() ->
+                                new UserNotFoundException(
+                                        "회원을 찾을 수 없습니다."
+                                )
+                        );
+
+        if (user.getDeletedAt() != null) {
+            throw new UserNotFoundException(
+                    "회원을 찾을 수 없습니다."
+            );
+        }
+
+        return user;
+    }
+
     private Post findPostById(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
     }
 
-    private void increaseViewCountIfFirstView(Post post, Long userId) {
+    private void increaseViewCountIfFirstView(
+            Post post,
+            User viewer
+    ) {
+        /*
+         * 일반 exists 조회 대신 잠금 조회를 사용한다.
+         *
+         * 앞선 중복 요청이 조회 기록을 생성했다면
+         * 여기서 최신 상태를 확인하고 정상 종료한다.
+         */
         boolean alreadyViewed =
                 postViewRepository
-                        .existsByUser_IdAndPost_Id(
-                                userId,
+                        .findByUserIdAndPostIdForUpdate(
+                                viewer.getId(),
                                 post.getId()
-                        );
+                        )
+                        .isPresent();
 
         if (alreadyViewed) {
             return;
         }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                "회원을 찾을 수 없습니다."
-                        )
+        PostView postView =
+                new PostView(
+                        viewer,
+                        post
                 );
 
-        PostView postView = new PostView(user, post);
-        postViewRepository.save(postView);
+        /*
+         * 조회 기록을 먼저 반영한다.
+         *
+         * 이후 조회수 증가가 실패하면 같은 트랜잭션에서
+         * 조회 기록과 조회수 변경이 함께 Rollback된다.
+         */
+        postViewRepository
+                .saveAndFlush(postView);
 
-        post.increaseViewCount();
-    }
+        int updatedRowCount =
+                postRepository
+                        .incrementViewCount(
+                                post.getId()
+                        );
 
-/*    private List<PostResponseDto> createPostResponseDtos(
-            List<Post> posts
-    ) {
-        if (posts.isEmpty()) {
-            return List.of();
+        if (updatedRowCount != 1) {
+            throw new PostNotFoundException(
+                    "게시글을 찾을 수 없습니다."
+            );
         }
 
-        List<Long> postIds = posts.stream()
-                .map(Post::getId)
-                .toList();
-
-        Map<Long, Long> likeCountMap =
-                postLikeRepository.countByPostIds(postIds)
-                        .stream()
-                        .collect(Collectors.toMap(
-                                projection -> projection.getPostId(),
-                                projection -> projection.getTotalCount()
-                        ));
-
-        Map<Long, Long> commentCountMap =
-                commentRepository.countByPostIds(postIds)
-                        .stream()
-                        .collect(Collectors.toMap(
-                                projection -> projection.getPostId(),
-                                projection -> projection.getTotalCount()
-                        ));
-
-        Map<Long, List<String>> imageUrlMap =
-                postImageRepository.findAllByPostIds(postIds)
-                        .stream()
-                        .collect(Collectors.groupingBy(
-                                image -> image.getPost().getId(),
-                                Collectors.mapping(
-                                        PostImage::getImageUrl,
-                                        Collectors.toList()
-                                )
-                        ));
-
-        return posts.stream()
-                .map(post -> new PostResponseDto(
-                        post,
-                        likeCountMap.getOrDefault(
-                                post.getId(),
-                                0L
-                        ),
-                        commentCountMap.getOrDefault(
-                                post.getId(),
-                                0L
-                        ),
-                        imageUrlMap.getOrDefault(
-                                post.getId(),
-                                List.of()
-                        )
-                ))
-                .toList();
+        /*
+         * JPQL UPDATE는 현재 영속성 컨텍스트의
+         * Post 객체 값을 자동으로 바꾸지 않는다.
+         */
+        entityManager.refresh(post);
     }
 
-    private PostResponseDto createPostResponseDto(Post post) {
-        long likeCount = postLikeRepository.countByPost_Id(post.getId());
-        long commentCount = commentRepository.countByPost_Id(post.getId());
-
-        List<String> imageUrls = postImageRepository
-                .findByPost_IdAndDeletedAtIsNullOrderBySortOrderAsc(post.getId())
-                .stream()
-                .map(PostImage::getImageUrl)
-                .toList();
-
-        return new PostResponseDto(post, likeCount, commentCount, imageUrls);
-    }*/
 }
