@@ -11,6 +11,10 @@ import {
 } from "@stomp/stompjs";
 
 import {
+    createClientMessageId
+} from "../utils/clientMessageId.js";
+
+import {
     getChatPresence
 } from "../api/chatApi.js";
 
@@ -760,7 +764,7 @@ function ChatProvider({
 
                 const normalizedClientMessageId =
                     clientMessageId
-                    || crypto.randomUUID();
+                    || createClientMessageId();
 
                 publishJson(
                     `/app/chat/rooms/${normalizedRoomId}/messages`,

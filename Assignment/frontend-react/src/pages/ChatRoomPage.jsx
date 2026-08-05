@@ -13,6 +13,10 @@ import {
 } from "react-router";
 
 import {
+    createClientMessageId
+} from "../utils/clientMessageId.js";
+
+import {
     getChatMessages,
     getChatRooms
 } from "../api/chatApi.js";
@@ -898,7 +902,7 @@ function ChatRoomPage() {
         }
 
         const clientMessageId =
-            crypto.randomUUID();
+            createClientMessageId();
 
         const pendingMessage = {
             messageId: null,
