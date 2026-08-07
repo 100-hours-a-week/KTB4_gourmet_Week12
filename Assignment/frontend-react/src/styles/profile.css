@@ -1,24 +1,25 @@
 .profile-page {
     --profile-border:
-        rgba(118, 143, 122, 0.44);
+        var(--gc-sage-soft);
 
     --profile-cream:
-        #f3f1e8;
+        var(--gc-cream);
 
     --profile-muted:
-        rgba(243, 241, 232, 0.7);
+        var(--gc-cream-muted);
 
     --profile-dim:
-        rgba(243, 241, 232, 0.43);
+        var(--gc-cream-dim);
 
     --profile-field:
-        #1e3324;
+        var(--gc-field);
 
     --profile-error:
-        #e8a0a0;
+        var(--gc-error);
 
     width: min(100%, 680px);
     margin: 0 auto;
+    animation: gc-fade-up var(--gc-duration-slow) var(--gc-ease) both;
 }
 
 .profile-toolbar {

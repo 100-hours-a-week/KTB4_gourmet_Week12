@@ -9,20 +9,20 @@ import {
 
 import {
     getChatRooms
-} from "../api/chatApi.js";
+} from "../../api/chatApi.js";
 
 import ChatRoomListItem
-    from "../components/chat/ChatRoomListItem.jsx";
+    from "./ChatRoomListItem.jsx";
 
 import useAuth
-    from "../hooks/useAuth.js";
+    from "../../hooks/useAuth.js";
 
 import useChat
-    from "../hooks/useChat.js";
+    from "../../hooks/useChat.js";
 
-import "../styles/chat-list.css";
-
-function ChatRoomsPage() {
+function ChatRoomListPanel({
+    activeRoomId
+}) {
     const navigate =
         useNavigate();
 
@@ -51,14 +51,6 @@ function ChatRoomsPage() {
         errorMessage,
         setErrorMessage
     ] = useState("");
-
-    useEffect(
-        function () {
-            document.title =
-                "채팅 · Gourmet Community";
-        },
-        []
-    );
 
     useEffect(
         function () {
@@ -140,13 +132,14 @@ function ChatRoomsPage() {
                             function (previous) {
                                 const roomIndex =
                                     previous
-                                            .findIndex(
-                                                room =>
-                                                    Number(
-                                                        room.roomId
-                                                    )
-                                                    === roomId
-                                            );
+                                        .findIndex(
+                                            function (room) {
+                                                return Number(
+                                                    room.roomId
+                                                )
+                                                    === roomId;
+                                            }
+                                        );
 
                                 if (roomIndex < 0) {
                                     return previous;
@@ -198,11 +191,12 @@ function ChatRoomsPage() {
                                     updatedRoom,
 
                                     ...previous.filter(
-                                        item =>
-                                            Number(
+                                        function (item) {
+                                            return Number(
                                                 item.roomId
                                             )
-                                            !== roomId
+                                                !== roomId;
+                                        }
                                     )
                                 ];
                             }
@@ -276,25 +270,11 @@ function ChatRoomsPage() {
     }
 
     return (
-        <section className="chat-list-page">
-            <header className="board-intro chat-list-header">
-                <div className="board-intro-copy">
-                    <p className="board-eyebrow">
-                        DIRECT MESSAGES
-                    </p>
-
-                    <h1>채팅</h1>
-
-                    <p className="board-description">
-                        친구들과 나눈 대화를 확인하세요.
-                    </p>
-                </div>
-            </header>
-
+        <>
             {
                 errorMessage && (
                     <p
-                        className="chat-page-error"
+                        className="chat-sidebar-error"
                         role="alert"
                     >
                         {errorMessage}
@@ -304,7 +284,7 @@ function ChatRoomsPage() {
 
             {
                 isLoading && (
-                    <p className="chat-list-state">
+                    <p className="chat-sidebar-state">
                         채팅방을 불러오는 중입니다.
                     </p>
                 )
@@ -314,7 +294,7 @@ function ChatRoomsPage() {
                 !isLoading
                 && rooms.length === 0
                 && (
-                    <div className="chat-list-state">
+                    <div className="chat-sidebar-state">
                         <strong>
                             아직 채팅방이 없습니다.
                         </strong>
@@ -344,6 +324,14 @@ function ChatRoomsPage() {
                                             ]
                                         )
                                     }
+                                    isActive={
+                                        Number(
+                                            room.roomId
+                                        )
+                                        === Number(
+                                            activeRoomId
+                                        )
+                                    }
                                     onOpen={
                                         handleOpenRoom
                                     }
@@ -353,8 +341,8 @@ function ChatRoomsPage() {
                     )
                 }
             </ul>
-        </section>
+        </>
     );
 }
 
-export default ChatRoomsPage;
+export default ChatRoomListPanel;

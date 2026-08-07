@@ -10,7 +10,8 @@ export const BOARD_CONFIG = Object.freeze({
         writeLabel: "글 작성",
         writePath: "/posts/new?board=free",
         emptyMessage:
-            "아직 자유 게시판에 글이 없습니다."
+            "아직 자유 게시판에 글이 없습니다.",
+        icon: "chat"
     },
 
     question: {
@@ -24,7 +25,8 @@ export const BOARD_CONFIG = Object.freeze({
         writeLabel: "질문 작성",
         writePath: "/posts/new?board=question",
         emptyMessage:
-            "아직 등록된 질문이 없습니다. 첫 질문을 남겨보세요."
+            "아직 등록된 질문이 없습니다. 첫 질문을 남겨보세요.",
+        icon: "question"
     },
 
     study: {
@@ -38,7 +40,8 @@ export const BOARD_CONFIG = Object.freeze({
         writeLabel: "기록 작성",
         writePath: "/posts/new?board=study",
         emptyMessage:
-            "아직 학습 기록이 없습니다. 오늘의 배움을 남겨보세요."
+            "아직 학습 기록이 없습니다. 오늘의 배움을 남겨보세요.",
+        icon: "book"
     },
 
     project: {
@@ -52,7 +55,8 @@ export const BOARD_CONFIG = Object.freeze({
         writeLabel: "모집 글쓰기",
         writePath: "/projects/new",
         emptyMessage:
-            "아직 모집 중인 프로젝트가 없습니다."
+            "아직 모집 중인 프로젝트가 없습니다.",
+        icon: "users"
     }
 });
 
@@ -62,7 +66,8 @@ export const BOARD_LINKS = Object.values(
     return {
         routeType: board.routeType,
         title: board.title,
-        path: `/boards/${board.routeType}`
+        path: `/boards/${board.routeType}`,
+        icon: board.icon
     };
 });
 

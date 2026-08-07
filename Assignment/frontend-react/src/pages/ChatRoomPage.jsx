@@ -17,9 +17,8 @@ import {
 } from "../utils/clientMessageId.js";
 
 import {
-    getChatMessages,
-    getChatRooms
-} from "../api/chatApi.js";
+    resolveAssetUrl
+} from "../utils/assetUrl.js";
 
 import ChatMessageComposer
     from "../components/chat/ChatMessageComposer.jsx";
@@ -32,6 +31,11 @@ import useAuth
 
 import useChat
     from "../hooks/useChat.js";
+
+import {
+    getChatMessages,
+    getChatRooms
+} from "../api/chatApi.js";
 
 import useChatRoomRealtime
     from "../hooks/useChatRoomRealtime.js";
@@ -364,6 +368,11 @@ function ChatRoomPage() {
     const friendUserId =
         resolveFriendUserId(
             roomInfo
+        );
+
+    const friendProfileImage =
+        resolveAssetUrl(
+            roomInfo?.friendProfileImage
         );
 
     const {
@@ -981,14 +990,14 @@ function ChatRoomPage() {
         || roomId < 1
     ) {
         return (
-            <section className="chat-page">
+            <section className="chat-conversation">
                 <div className="chat-state-card">
                     <h1>
                         채팅방을 찾을 수 없습니다.
                     </h1>
 
-                    <Link to="/friends">
-                        친구 목록으로 돌아가기
+                    <Link to="/chats">
+                        채팅 목록으로 돌아가기
                     </Link>
                 </div>
             </section>
@@ -996,50 +1005,75 @@ function ChatRoomPage() {
     }
 
     return (
-        <section className="chat-page">
-            <header className="chat-page-header">
-                <div>
-                    <p className="chat-eyebrow">
-                        DIRECT MESSAGE
-                    </p>
+        <section className="chat-conversation">
+            <header className="chat-conversation-header">
+                <div className="chat-conversation-title">
+                    <Link
+                        to="/chats"
+                        className="chat-back-button"
+                        aria-label="채팅 목록으로"
+                    >
+                        ←
+                    </Link>
 
-                    <h1>
-                        {friendNickname}
-                    </h1>
+                    <span className="chat-conversation-avatar">
+                        {
+                            friendProfileImage
+                                ? (
+                                    <img
+                                        src={
+                                            friendProfileImage
+                                        }
+                                        alt=""
+                                    />
+                                )
+                                : (
+                                    friendNickname
+                                        .charAt(0)
+                                        .toUpperCase()
+                                )
+                        }
+                    </span>
+
+                    <div>
+                        <h1>
+                            {friendNickname}
+                        </h1>
+
+                        <div
+                            className={[
+                                "chat-presence",
+
+                                isFriendOnline === true
+                                    ? "is-online"
+                                    : "",
+
+                                isFriendOnline === false
+                                    ? "is-offline"
+                                    : "",
+
+                                isFriendOnline === null
+                                    ? "is-unknown"
+                                    : ""
+                            ]
+                                .filter(Boolean)
+                                .join(" ")
+                            }
+                        >
+                            <span aria-hidden="true" />
+
+                            {
+                                isFriendOnline === true
+                                    ? "온라인"
+                                    : isFriendOnline === false
+                                        ? "오프라인"
+                                        : "상태 확인 중"
+                            }
+                        </div>
+                    </div>
                 </div>
 
                 <div className="chat-status-stack">
-                    <div
-                        className={[
-                            "chat-presence",
-
-                            isFriendOnline === true
-                                ? "is-online"
-                                : "",
-
-                            isFriendOnline === false
-                                ? "is-offline"
-                                : "",
-
-                            isFriendOnline === null
-                                ? "is-unknown"
-                                : ""
-                        ]
-                            .filter(Boolean)
-                            .join(" ")
-                        }
-                    >
-                        <span aria-hidden="true" />
-
-                        {
-                            isFriendOnline === true
-                                ? "온라인"
-                                : isFriendOnline === false
-                                    ? "오프라인"
-                                    : "상태 확인 중"
-                        }
-                    </div>
-
                     {
                         !isConnected && (
                             <span className="chat-reconnecting">
@@ -1048,7 +1082,6 @@ function ChatRoomPage() {
                         )
                     }
                 </div>
-
             </header>
 
             {

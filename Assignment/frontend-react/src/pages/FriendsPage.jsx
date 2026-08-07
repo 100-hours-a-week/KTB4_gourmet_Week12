@@ -36,6 +36,9 @@ import FriendRequestSection
 import FriendSearchSection
     from "../components/friend/FriendSearchSection.jsx";
 
+import BoardBackButton
+    from "../components/common/BoardBackButton.jsx";
+
 import "../styles/friends.css";
 
 function FriendsPage() {
@@ -496,17 +499,21 @@ function FriendsPage() {
 
     return (
         <div className="friends-page">
-            <section className="friends-page-intro">
-                <p className="friends-eyebrow">
-                    GOURMET CONNECTIONS
-                </p>
+            <BoardBackButton />
 
-                <h1>친구</h1>
+            <section className="board-intro friends-page-intro">
+                <div className="board-intro-copy">
+                    <p className="board-eyebrow">
+                        GOURMET CONNECTIONS
+                    </p>
 
-                <p>
-                    함께 이야기하고 싶은 회원을 찾고
-                    친구 요청을 관리해보세요.
-                </p>
+                    <h1>친구</h1>
+
+                    <p className="board-description">
+                        함께 이야기하고 싶은 회원을 찾고
+                        친구 요청을 관리해보세요.
+                    </p>
+                </div>
             </section>
 
             {
@@ -537,6 +544,19 @@ function FriendsPage() {
                         onReject={handleReject}
                     />
 
+                    <FriendListSection
+                        friends={friends}
+                        isLoading={isLoading}
+                        chattingUserId={
+                            chattingUserId
+                        }
+                        onStartChat={
+                            handleStartChat
+                        }
+                    />
+                </div>
+
+                <aside className="friends-page-side">
                     <FriendRequestSection
                         receivedRequests={
                             receivedRequests
@@ -550,19 +570,6 @@ function FriendsPage() {
                         onAccept={handleAccept}
                         onReject={handleReject}
                         onCancel={handleCancel}
-                    />
-                </div>
-
-                <aside className="friends-page-side">
-                    <FriendListSection
-                        friends={friends}
-                        isLoading={isLoading}
-                        chattingUserId={
-                            chattingUserId
-                        }
-                        onStartChat={
-                            handleStartChat
-                        }
                     />
                 </aside>
             </div>

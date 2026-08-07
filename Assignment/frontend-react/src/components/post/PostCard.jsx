@@ -66,6 +66,12 @@ function PostCard({
             .replace(/\s+/g, " ")
             .trim();
 
+    const badgeClass =
+        `post-card-badge is-${
+            String(post.boardType ?? "free")
+                .toLowerCase()
+        }`;
+
     return (
         <Link
             to={`/posts/${postId}`}
@@ -77,7 +83,7 @@ function PostCard({
             <div className="post-card-content">
                 <div className="post-card-top">
                     <div className="post-card-text">
-                        <span className="post-card-badge">
+                        <span className={badgeClass}>
                             {
                                 BOARD_BADGES[
                                     post.boardType
@@ -98,33 +104,76 @@ function PostCard({
                             )
                         }
 
-                        <div className="post-card-stats">
-                            <span>
-                                좋아요{" "}
+                        <div className="post-card-meta-row">
+                            <div className="post-card-writer-inline">
                                 {
-                                    formatCount(
-                                        post.likeCount
-                                    )
+                                    profileImage
+                                        ? (
+                                            <img
+                                                className="post-writer-image"
+                                                src={profileImage}
+                                                alt=""
+                                            />
+                                        )
+                                        : (
+                                            <span
+                                                className="post-writer-fallback"
+                                                aria-hidden="true"
+                                            >
+                                                {
+                                                    nickname
+                                                        .charAt(0)
+                                                        .toUpperCase()
+                                                }
+                                            </span>
+                                        )
                                 }
-                            </span>
 
-                            <span>
-                                댓글{" "}
-                                {
-                                    formatCount(
-                                        post.commentCount
-                                    )
-                                }
-                            </span>
+                                <span className="post-writer-name">
+                                    {nickname}
+                                </span>
+                            </div>
 
-                            <span>
-                                조회수{" "}
-                                {
-                                    formatCount(
-                                        post.viewCount
-                                    )
-                                }
-                            </span>
+                            <div className="post-card-stats">
+                                <span>
+                                    ♥{" "}
+                                    {
+                                        formatCount(
+                                            post.likeCount
+                                        )
+                                    }
+                                </span>
+
+                                <span>
+                                    💬{" "}
+                                    {
+                                        formatCount(
+                                            post.commentCount
+                                        )
+                                    }
+                                </span>
+
+                                <span>
+                                    👁{" "}
+                                    {
+                                        formatCount(
+                                            post.viewCount
+                                        )
+                                    }
+                                </span>
+                            </div>
+
+                            {
+                                !thumbnail && (
+                                    <span className="post-created-at">
+                                        {
+                                            formatDate(
+                                                post.createdAt
+                                            )
+                                        }
+                                    </span>
+                                )
+                            }
                         </div>
 
                         {
@@ -150,53 +199,31 @@ function PostCard({
 
                     {
                         thumbnail && (
-                            <div className="post-thumbnail-wrapper">
-                                <img
-                                    className="post-thumbnail"
-                                    src={thumbnail}
-                                    alt=""
-                                />
+                            <div className="post-thumbnail-column">
+                                <div className="post-thumbnail-wrapper">
+                                    <img
+                                        className="post-thumbnail"
+                                        src={thumbnail}
+                                        alt=""
+                                    />
+                                </div>
+
+                                <time
+                                    className="post-created-at"
+                                    dateTime={
+                                        post.createdAt
+                                    }
+                                >
+                                    {
+                                        formatDate(
+                                            post.createdAt
+                                        )
+                                    }
+                                </time>
                             </div>
                         )
                     }
                 </div>
-            </div>
-
-            <div className="post-card-writer">
-                {
-                    profileImage
-                        ? (
-                            <img
-                                className="post-writer-image"
-                                src={profileImage}
-                                alt=""
-                            />
-                        )
-                        : (
-                            <span
-                                className="post-writer-fallback"
-                                aria-hidden="true"
-                            >
-                                {
-                                    nickname
-                                        .charAt(0)
-                                        .toUpperCase()
-                                }
-                            </span>
-                        )
-                }
-
-                <span className="post-writer-name">
-                    {nickname}
-                </span>
-
-                <span className="post-created-at">
-                    {
-                        formatDate(
-                            post.createdAt
-                        )
-                    }
-                </span>
             </div>
         </Link>
     );

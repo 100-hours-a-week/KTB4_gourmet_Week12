@@ -1,31 +1,4 @@
 .auth-page {
-    --gc-forest: #2d4f36;
-    --gc-forest-deep: #0f2418;
-    --gc-forest-dark: #08170f;
-    --gc-forest-mid: #1d3a28;
-    --gc-field: #183323;
-
-    --gc-sage: #768f7a;
-    --gc-sage-light: #a9bca9;
-    --gc-sage-soft: rgba(118, 143, 122, 0.38);
-
-    --gc-cream: #f3f1e8;
-    --gc-cream-muted: rgba(243, 241, 232, 0.72);
-    --gc-cream-dim: rgba(243, 241, 232, 0.48);
-
-    --gc-error: #e8a0a0;
-    --gc-white: #ffffff;
-
-    --font-display:
-        "Cormorant Garamond",
-        "Times New Roman",
-        serif;
-
-    --font-body:
-        "Source Sans 3",
-        "Segoe UI",
-        sans-serif;
-
     min-height: 100vh;
     display: grid;
     grid-template-columns:

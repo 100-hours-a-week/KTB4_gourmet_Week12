@@ -2,7 +2,7 @@ import {
     NavLink
 } from "react-router";
 
-import "../../styles/friend-shortcut.css";
+import "../../styles/header-actions.css";
 
 function FriendShortcutButton() {
     return (
@@ -12,6 +12,7 @@ function FriendShortcutButton() {
                 isActive
             }) {
                 return [
+                    "header-action-button",
                     "friend-shortcut-button",
                     isActive
                         ? "is-active"
@@ -24,33 +25,28 @@ function FriendShortcutButton() {
             title="친구"
         >
             <svg
-                className="friend-shortcut-icon"
+                className="header-action-icon friend-shortcut-icon"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
+                fill="currentColor"
             >
+                <circle cx="9" cy="7.6" r="3.2" />
                 <path
                     d="
-                        M14 20
-                        C14 16.7 11.5 14 8.5 14
-                        C5.5 14 3 16.7 3 20
-
-                        M8.5 11
-                        C10.7 11 12.5 9.2 12.5 7
-                        C12.5 4.8 10.7 3 8.5 3
-                        C6.3 3 4.5 4.8 4.5 7
-                        C4.5 9.2 6.3 11 8.5 11
-
-                        M18 7
-                        V13
-
-                        M15 10
-                        H21
+                        M3.4 19.8
+                        C3.9 16.2 6.1 14 9 14
+                        C11.9 14 14.1 16.2 14.6 19.8
+                        Z
                     "
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                />
+                <circle cx="16.5" cy="8.1" r="2.6" />
+                <path
+                    d="
+                        M12.6 19.8
+                        C13.1 17.1 14.7 15.2 16.7 15.2
+                        C18.7 15.2 20.3 17.1 20.8 19.8
+                        Z
+                    "
                 />
             </svg>
         </NavLink>

@@ -22,6 +22,7 @@ import {
 import NotificationItem
     from "./NotificationItem.jsx";
 
+import "../../styles/header-actions.css";
 import "../../styles/notification.css";
 
 const NOTIFICATION_PAGE_SIZE = 10;
@@ -669,40 +670,32 @@ function NotificationBell() {
         >
             <button
                 type="button"
-                className="notification-button"
+                className={
+                    `header-action-button notification-button ${
+                        isOpen
+                            ? "is-open"
+                            : ""
+                    }`
+                }
                 aria-label="알림 확인"
                 aria-expanded={isOpen}
                 onClick={handleBellClick}
             >
                 <svg
-                    className="notification-icon"
+                    className="header-action-icon notification-icon"
                     viewBox="0 0 24 24"
                     aria-hidden="true"
+                    fill="currentColor"
                 >
-                    <path
-                        d="
-                            M18 8
-                            A6 6 0 0 0 6 8
-                            C6 15 3 16 3 16
-                            H21
-                            C21 16 18 15 18 8
-                            Z
-                            M10 20
-                            H14
-                        "
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    />
+                    <path d="M12 2.6c-.9 0-1.65.7-1.65 1.55v.35C7.7 5 6.1 7.15 6.1 9.7v4.15l-1.7 2.35c-.35.5 0 1.2.6 1.2h14c.6 0 .95-.7.6-1.2l-1.7-2.35V9.7c0-2.55-1.6-4.7-4.25-5.2v-.35C13.65 3.3 12.9 2.6 12 2.6z" />
+                    <path d="M10.15 19.55c.35.95 1.25 1.6 2.25 1.6s1.9-.65 2.25-1.6z" />
                 </svg>
 
                 {
                     unreadCount > 0 && (
                         <span
                             className={
-                                "notification-badge"
+                                "header-action-badge notification-badge"
                             }
                             aria-label={
                                 `읽지 않은 알림 ${unreadCount}개`

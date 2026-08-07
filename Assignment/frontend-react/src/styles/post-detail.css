@@ -1,21 +1,22 @@
 .post-detail-page {
     --detail-sage:
-        rgba(118, 143, 122, 0.45);
+        var(--gc-sage-soft);
 
     --detail-cream:
-        #f3f1e8;
+        var(--gc-cream);
 
     --detail-cream-muted:
-        rgba(243, 241, 232, 0.72);
+        var(--gc-cream-muted);
 
     --detail-cream-dim:
-        rgba(243, 241, 232, 0.45);
+        var(--gc-cream-dim);
 
     --detail-field:
-        #1e3324;
+        var(--gc-field);
 
     width: min(100%, 760px);
     margin: 0 auto;
+    animation: gc-fade-up var(--gc-duration-slow) var(--gc-ease) both;
 }
 
 .post-detail-toolbar {

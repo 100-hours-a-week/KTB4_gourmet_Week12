@@ -1,0 +1,119 @@
+/**
+ * Micro-interactions — CSS only.
+ * 1) list fade-up  2) card hover glow
+ * 3) icon press + badge bounce  4) bubble pop-in
+ */
+
+@keyframes gc-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes gc-bubble-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes gc-badge-bounce {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.18);
+    }
+
+    70% {
+        transform: scale(0.94);
+    }
+}
+
+@keyframes gc-glow-ring {
+    from {
+        box-shadow: 0 0 0 0 var(--gc-glow);
+    }
+
+    to {
+        box-shadow: 0 0 0 10px transparent;
+    }
+}
+
+@keyframes gc-panel-in {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes gc-dot-pulse {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.55;
+        transform: scale(0.85);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gc-icon-button,
+    .post-card,
+    .popular-post-card,
+    .chat-message-item,
+    .friends-page,
+    .notification-panel,
+    .friend-search-item,
+    .friend-list-item,
+    .chat-room-list-item {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+.gc-icon-button {
+    transition:
+        border-color var(--gc-duration) var(--gc-ease),
+        color var(--gc-duration) var(--gc-ease),
+        background-color var(--gc-duration) var(--gc-ease),
+        transform var(--gc-duration) var(--gc-ease),
+        box-shadow var(--gc-duration) var(--gc-ease);
+}
+
+.gc-icon-button:hover,
+.gc-icon-button:focus-visible {
+    border-color: var(--gc-sage);
+    background: var(--gc-forest-mid);
+    color: var(--gc-cream);
+    box-shadow: 0 0 0 3px var(--gc-glow);
+}
+
+.gc-icon-button:active {
+    transform: scale(0.92);
+}
+
+.gc-icon-badge {
+    animation: gc-badge-bounce 0.55s var(--gc-ease);
+}

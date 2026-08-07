@@ -1,5 +1,8 @@
-import ChatRoomsPage from
-    "./pages/ChatRoomsPage.jsx";
+import ChatLayoutPage from
+    "./pages/ChatLayoutPage.jsx";
+
+import ChatEmptyPage from
+    "./pages/ChatEmptyPage.jsx";
 
 import ChatRoomPage from
     "./pages/ChatRoomPage.jsx";
@@ -124,14 +127,18 @@ function App() {
 
                     <Route
                         path="/chats"
-                        element={<ChatRoomsPage />}
-                    />
+                        element={<ChatLayoutPage />}
+                    >
+                        <Route
+                            index
+                            element={<ChatEmptyPage />}
+                        />
 
-
-                    <Route
-                        path="/chats/:roomId"
-                        element={<ChatRoomPage />}
-                    />
+                        <Route
+                            path=":roomId"
+                            element={<ChatRoomPage />}
+                        />
+                    </Route>
 
                     <Route
                         path="/profile"

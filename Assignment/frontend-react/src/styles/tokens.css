@@ -1,0 +1,58 @@
+/**
+ * Gourmet Community design tokens
+ * Elevated forest / sage / cream — shared by community + auth.
+ */
+:root {
+    --gc-forest: #2d4f36;
+    --gc-forest-deep: #0f2418;
+    --gc-forest-dark: #07130c;
+    --gc-forest-mid: #1d3a28;
+    --gc-field: #1a3526;
+
+    --gc-sage: #8fad93;
+    --gc-sage-light: #b9cdb7;
+    --gc-sage-mint: #a8c4ad;
+    --gc-sage-soft: rgba(143, 173, 147, 0.42);
+
+    --gc-cream: #f5f2e8;
+    --gc-cream-muted: rgba(245, 242, 232, 0.78);
+    --gc-cream-dim: rgba(245, 242, 232, 0.55);
+
+    --gc-bubble-mine: #ddd8c8;
+    --gc-bubble-mine-text: #1a2e22;
+    --gc-bubble-other: #8fad93;
+    --gc-bubble-other-text: #122418;
+    --gc-composer-field: rgba(34, 52, 40, 0.72);
+    --gc-composer-field-text: #e8e4d8;
+
+    --gc-error: #e8a0a0;
+    --gc-white: #ffffff;
+    --gc-badge: #e17970;
+
+    --gc-panel: rgba(10, 32, 20, 0.92);
+    --gc-panel-soft: rgba(15, 44, 28, 0.78);
+    --gc-border: rgba(215, 228, 211, 0.16);
+    --gc-border-strong: rgba(220, 233, 216, 0.32);
+    --gc-glow: rgba(143, 173, 147, 0.28);
+
+    --font-display:
+        "Cormorant Garamond",
+        "Times New Roman",
+        serif;
+
+    --font-body:
+        "Source Sans 3",
+        "Segoe UI",
+        sans-serif;
+
+    --gc-radius-sm: 8px;
+    --gc-radius-md: 12px;
+    --gc-radius-lg: 16px;
+
+    --gc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --gc-duration: 180ms;
+    --gc-duration-slow: 420ms;
+
+    --community-header-height: 78px;
+    --community-sidebar-width: 230px;
+}

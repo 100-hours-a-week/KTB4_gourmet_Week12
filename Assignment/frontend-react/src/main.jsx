@@ -10,6 +10,9 @@ import AuthProvider
 import ChatProvider
     from "./contexts/ChatProvider.jsx";
 
+import "./styles/tokens.css";
+import "./styles/motion.css";
+import "./styles/header-actions.css";
 import "./styles/global.css";
 
 createRoot(

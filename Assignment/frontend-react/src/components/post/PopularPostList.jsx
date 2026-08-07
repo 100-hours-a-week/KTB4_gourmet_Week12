@@ -13,6 +13,24 @@ const BOARD_BADGES = {
     PROJECT: "프로젝트 모집"
 };
 
+const MEDAL_BY_RANK = {
+    1: {
+        emoji: "🥇",
+        label: "1위",
+        className: "is-gold"
+    },
+    2: {
+        emoji: "🥈",
+        label: "2위",
+        className: "is-silver"
+    },
+    3: {
+        emoji: "🥉",
+        label: "3위",
+        className: "is-bronze"
+    }
+};
+
 function formatPopularTime(createdAt) {
     if (!createdAt) {
         return "";
@@ -56,6 +74,39 @@ function formatPopularTime(createdAt) {
         Math.floor(hours / 24);
 
     return `${days}일 전`;
+}
+
+function isHotPost(post) {
+    if (!post?.createdAt) {
+        return false;
+    }
+
+    const createdTime =
+        new Date(post.createdAt).getTime();
+
+    if (
+        Number.isNaN(createdTime)
+    ) {
+        return false;
+    }
+
+    const hoursSince =
+        (
+            Date.now()
+            - createdTime
+        ) / (1000 * 60 * 60);
+
+    if (hoursSince > 3) {
+        return false;
+    }
+
+    const likes =
+        Number(post.likeCount) || 0;
+
+    const comments =
+        Number(post.commentCount) || 0;
+
+    return likes + comments >= 1;
 }
 
 function PopularPostList({
@@ -136,37 +187,93 @@ function PopularPostList({
                                     post.id ??
                                     post.postId;
 
+                                const medal =
+                                    MEDAL_BY_RANK[
+                                        rank
+                                    ];
+
+                                const isHot =
+                                    isHotPost(post);
+
                                 const rankClass =
-                                    rank <= 3
-                                        ? `rank-${rank}`
-                                        : "rank-default";
+                                    rank === 1
+                                        ? "is-rank-1"
+                                        : rank === 2
+                                            ? "is-rank-2"
+                                            : rank === 3
+                                                ? "is-rank-3"
+                                                : "";
 
                                 return (
                                     <li
                                         key={postId}
-                                        className="popular-post-list-item"
+                                        className={[
+                                            "popular-post-list-item",
+                                            rankClass
+                                        ]
+                                            .filter(Boolean)
+                                            .join(" ")}
                                     >
                                         <Link
                                             to={`/posts/${postId}`}
-                                            className="popular-post-card"
+                                            className={[
+                                                "popular-post-card",
+                                                rankClass
+                                            ]
+                                                .filter(Boolean)
+                                                .join(" ")}
                                         >
                                             <div className="popular-post-card-top">
-                                                <span
-                                                    className={[
-                                                        "popular-post-rank",
-                                                        rankClass
-                                                    ].join(" ")}
-                                                >
-                                                    {rank}
-                                                </span>
+                                                {
+                                                    medal
+                                                        ? (
+                                                            <span
+                                                                className={
+                                                                    `popular-post-medal ${
+                                                                        medal.className
+                                                                    }`
+                                                                }
+                                                            >
+                                                                <span
+                                                                    className="popular-post-medal-icon"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    {
+                                                                        medal.emoji
+                                                                    }
+                                                                </span>
 
-                                                <span className="popular-post-board">
+                                                                <span className="popular-post-medal-label">
+                                                                    {
+                                                                        medal.label
+                                                                    }
+                                                                </span>
+                                                            </span>
+                                                        )
+                                                        : (
+                                                            <span className="popular-post-rank-label">
+                                                                TOP {rank}
+                                                            </span>
+                                                        )
+                                                }
+
+                                                <div className="popular-post-card-badges">
                                                     {
-                                                        BOARD_BADGES[
-                                                            post.boardType
-                                                        ] ?? "게시글"
+                                                        isHot && (
+                                                            <span className="popular-post-hot-badge">
+                                                                HOT
+                                                            </span>
+                                                        )
                                                     }
-                                                </span>
+
+                                                    <span className="popular-post-board">
+                                                        {
+                                                            BOARD_BADGES[
+                                                                post.boardType
+                                                            ] ?? "게시글"
+                                                        }
+                                                    </span>
+                                                </div>
                                             </div>
 
                                             <h3>
@@ -176,16 +283,14 @@ function PopularPostList({
                                                 }
                                             </h3>
 
-                                            <p className="popular-post-author">
-                                                {
-                                                    post.nickname
-                                                    ?? "작성자"
-                                                }
-                                            </p>
-
-                                            <div className="popular-post-stats">
+                                            <div
+                                                className="popular-post-reactions"
+                                                aria-label="게시글 반응"
+                                            >
                                                 <span>
-                                                    ♥{" "}
+                                                    <span aria-hidden="true">
+                                                        ♥
+                                                    </span>
                                                     {
                                                         formatCount(
                                                             post.likeCount
@@ -194,7 +299,9 @@ function PopularPostList({
                                                 </span>
 
                                                 <span>
-                                                    댓글{" "}
+                                                    <span aria-hidden="true">
+                                                        💬
+                                                    </span>
                                                     {
                                                         formatCount(
                                                             post.commentCount
@@ -203,7 +310,9 @@ function PopularPostList({
                                                 </span>
 
                                                 <span>
-                                                    조회{" "}
+                                                    <span aria-hidden="true">
+                                                        👁
+                                                    </span>
                                                     {
                                                         formatCount(
                                                             post.viewCount
@@ -212,17 +321,38 @@ function PopularPostList({
                                                 </span>
                                             </div>
 
-                                            <time
-                                                dateTime={
-                                                    post.createdAt
-                                                }
-                                            >
-                                                {
-                                                    formatPopularTime(
+                                            <div className="popular-post-footer">
+                                                <p className="popular-post-author">
+                                                    <span
+                                                        className="popular-post-author-avatar"
+                                                        aria-hidden="true"
+                                                    >
+                                                        {
+                                                            String(
+                                                                post.nickname
+                                                                ?? "작"
+                                                            )
+                                                                .charAt(0)
+                                                        }
+                                                    </span>
+                                                    {
+                                                        post.nickname
+                                                        ?? "작성자"
+                                                    }
+                                                </p>
+
+                                                <time
+                                                    dateTime={
                                                         post.createdAt
-                                                    )
-                                                }
-                                            </time>
+                                                    }
+                                                >
+                                                    {
+                                                        formatPopularTime(
+                                                            post.createdAt
+                                                        )
+                                                    }
+                                                </time>
+                                            </div>
                                         </Link>
                                     </li>
                                 );

@@ -72,7 +72,7 @@ function ValidBoardPage({ board }) {
             try {
                 const response =
                     await getPopularPosts({
-                        limit: 5,
+                        limit: 3,
                         signal:
                             controller.signal
                     });
@@ -162,15 +162,30 @@ function ValidBoardPage({ board }) {
     return (
         <div className="board-page">
             <section className="board-intro">
-                <p className="board-eyebrow">
-                    {board.eyebrow}
-                </p>
+                <div className="board-intro-copy">
+                    <p className="board-eyebrow">
+                        {board.eyebrow}
+                    </p>
 
-                <h1>{board.title}</h1>
+                    <h1>{board.title}</h1>
 
-                <p className="board-description">
-                    {board.description}
-                </p>
+                    <p className="board-description">
+                        {board.description}
+                    </p>
+                </div>
+
+                <Link
+                    to={board.writePath}
+                    className="board-write-button"
+                >
+                    <span
+                        className="board-write-icon"
+                        aria-hidden="true"
+                    >
+                        ✎
+                    </span>
+                    {board.writeLabel}
+                </Link>
             </section>
 
             <PopularPostList
@@ -181,13 +196,6 @@ function ValidBoardPage({ board }) {
 
             <section className="board-action">
                 <h2>{board.listTitle}</h2>
-
-                <Link
-                    to={board.writePath}
-                    className="board-write-button"
-                >
-                    {board.writeLabel}
-                </Link>
             </section>
 
             <section

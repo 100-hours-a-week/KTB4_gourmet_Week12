@@ -5,7 +5,7 @@ import {
 import useChatUnreadCount
     from "../../hooks/useChatUnreadCount.js";
 
-import "../../styles/chat-shortcut.css";
+import "../../styles/header-actions.css";
 
 function ChatShortcutButton() {
     const unreadCount =
@@ -18,6 +18,7 @@ function ChatShortcutButton() {
                 isActive
             }) {
                 return [
+                    "header-action-button",
                     "chat-shortcut-button",
                     isActive
                         ? "is-active"
@@ -34,29 +35,44 @@ function ChatShortcutButton() {
             title="채팅"
         >
             <svg
-                className="chat-shortcut-icon"
+                className="header-action-icon chat-shortcut-icon"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
+                fill="currentColor"
             >
                 <path
+                    fillRule="evenodd"
                     d="
-                        M4 5.5
-                        C4 4.1 5.1 3 6.5 3
-                        H17.5
-                        C18.9 3 20 4.1 20 5.5
-                        V14.5
-                        C20 15.9 18.9 17 17.5 17
-                        H10
-                        L5 21
-                        V17
-                        C4.4 16.5 4 15.6 4 14.5
+                        M5.1 4
+                        H18.9
+                        C20.5 4 21.8 5.3 21.8 6.9
+                        V14
+                        C21.8 15.6 20.5 16.9 18.9 16.9
+                        H11.1
+                        L7.2 20.2
+                        C6.65 20.7 5.8 20.3 5.8 19.55
+                        V16.9
+                        H5.1
+                        C3.5 16.9 2.2 15.6 2.2 14
+                        V6.9
+                        C2.2 5.3 3.5 4 5.1 4
+                        Z
+
+                        M8.1 11.55
+                        A1.15 1.15 0 1 0 8.1 9.25
+                        A1.15 1.15 0 0 0 8.1 11.55
+                        Z
+
+                        M12 11.55
+                        A1.15 1.15 0 1 0 12 9.25
+                        A1.15 1.15 0 0 0 12 11.55
+                        Z
+
+                        M15.9 11.55
+                        A1.15 1.15 0 1 0 15.9 9.25
+                        A1.15 1.15 0 0 0 15.9 11.55
                         Z
                     "
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
                 />
             </svg>
 
@@ -64,7 +80,7 @@ function ChatShortcutButton() {
                 unreadCount > 0 && (
                     <span
                         className={
-                            "chat-shortcut-badge"
+                            "header-action-badge chat-shortcut-badge"
                         }
                     >
                         {

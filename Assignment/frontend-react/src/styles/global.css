@@ -1,23 +1,16 @@
-:root {
-    font-family:
-        "Source Sans 3",
-        Pretendard,
-        Arial,
-        sans-serif;
-
-    color: #f5f2e8;
-    background: #07170f;
+html {
+    min-width: 320px;
+    min-height: 100%;
+    font-family: var(--font-body);
+    color: var(--gc-cream);
+    background: var(--gc-forest-dark);
     font-synthesis: none;
     text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
 }
 
 * {
     box-sizing: border-box;
-}
-
-html {
-    min-width: 320px;
-    min-height: 100%;
 }
 
 body {
@@ -27,10 +20,10 @@ body {
     background:
         radial-gradient(
             circle at top,
-            rgba(39, 91, 61, 0.35),
-            transparent 46%
+            rgba(45, 79, 54, 0.42),
+            transparent 48%
         ),
-        #07170f;
+        var(--gc-forest-dark);
 }
 
 button,
@@ -279,4 +272,36 @@ a {
     color: rgba(245, 242, 232, 0.72);
     background: #07170f;
     font-size: 15px;
+}
+
+.page-back-toolbar {
+    margin-bottom: 1rem;
+}
+
+.page-back-toolbar button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 14px;
+    border: 1px solid var(--gc-sage-soft);
+    border-radius: 4px;
+    color: var(--gc-cream-muted);
+    background: rgba(255, 255, 255, 0.035);
+    cursor: pointer;
+    transition:
+        border-color var(--gc-duration) var(--gc-ease),
+        color var(--gc-duration) var(--gc-ease),
+        background-color var(--gc-duration) var(--gc-ease);
+}
+
+.page-back-toolbar button:hover {
+    border-color: var(--gc-sage);
+    color: var(--gc-cream);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.page-back-toolbar button span {
+    font-size: 25px;
+    line-height: 1;
 }

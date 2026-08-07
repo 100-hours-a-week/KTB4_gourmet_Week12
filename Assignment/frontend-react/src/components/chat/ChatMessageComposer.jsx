@@ -37,44 +37,48 @@ function ChatMessageComposer({
                 채팅 메시지
             </label>
 
-            <textarea
-                id="chat-message-input"
-                value={value}
-                rows={1}
-                maxLength={2000}
-                disabled={!isConnected}
-                placeholder={
-                    isConnected
-                        ? "메시지를 입력하세요."
-                        : "채팅 서버에 연결 중입니다."
-                }
-                onChange={
-                    function (event) {
-                        onChange(
-                            event.target.value
-                        );
+            <div className="chat-composer-field">
+                <textarea
+                    id="chat-message-input"
+                    value={value}
+                    rows={1}
+                    maxLength={2000}
+                    disabled={!isConnected}
+                    placeholder={
+                        isConnected
+                            ? "메시지 입력..."
+                            : "채팅 서버에 연결 중입니다."
                     }
-                }
-                onKeyDown={
-                    handleKeyDown
-                }
-            />
-
-            <div className="chat-composer-side">
-                <span>
-                    {value.length}/2000
-                </span>
-
-                <button
-                    type="submit"
-                    disabled={
-                        !isConnected
-                        || !value.trim()
+                    onChange={
+                        function (event) {
+                            onChange(
+                                event.target.value
+                            );
+                        }
                     }
-                >
-                    전송
-                </button>
+                    onKeyDown={
+                        handleKeyDown
+                    }
+                />
             </div>
+
+            <button
+                type="submit"
+                className="chat-composer-send"
+                aria-label="메시지 전송"
+                disabled={
+                    !isConnected
+                    || !value.trim()
+                }
+            >
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    fill="currentColor"
+                >
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+            </button>
         </form>
     );
 }

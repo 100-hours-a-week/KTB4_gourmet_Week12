@@ -1,24 +1,25 @@
 .search-page {
     --search-border:
-        rgba(118, 143, 122, 0.4);
+        var(--gc-sage-soft);
 
     --search-cream:
-        #f3f1e8;
+        var(--gc-cream);
 
     --search-muted:
-        rgba(243, 241, 232, 0.68);
+        var(--gc-cream-muted);
 
     --search-dim:
-        rgba(243, 241, 232, 0.43);
+        var(--gc-cream-dim);
 
     --search-field:
-        #1e3324;
+        var(--gc-field);
 
     --search-error:
-        #e8a0a0;
+        var(--gc-error);
 
     width: min(100%, 980px);
     margin: 0 auto;
+    animation: gc-fade-up var(--gc-duration-slow) var(--gc-ease) both;
 }
 
 .search-intro {

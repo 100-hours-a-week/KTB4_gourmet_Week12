@@ -1,24 +1,25 @@
 .post-form-page {
     --post-form-border:
-        rgba(118, 143, 122, 0.45);
+        var(--gc-sage-soft);
 
     --post-form-cream:
-        #f3f1e8;
+        var(--gc-cream);
 
     --post-form-muted:
-        rgba(243, 241, 232, 0.7);
+        var(--gc-cream-muted);
 
     --post-form-dim:
-        rgba(243, 241, 232, 0.42);
+        var(--gc-cream-dim);
 
     --post-form-field:
-        #1e3324;
+        var(--gc-field);
 
     --post-form-error:
-        #e8a0a0;
+        var(--gc-error);
 
     width: min(100%, 760px);
     margin: 0 auto;
+    animation: gc-fade-up var(--gc-duration-slow) var(--gc-ease) both;
 }
 
 .post-form-toolbar {

@@ -25,6 +25,8 @@ import {
 import ChatShortcutButton
     from "../chat/ChatShortcutButton.jsx";
 
+import "../../styles/header-actions.css";
+
 function CommunityHeader({
     isSidebarOpen,
     onToggleSidebar
@@ -190,8 +192,11 @@ function CommunityHeader({
                     src={
                         "/images/gourmet-logo.png"
                     }
-                    alt="Gourmet Community"
+                    alt=""
                 />
+                <span className="community-logo-text">
+                    Gourmet Community
+                </span>
             </Link>
 
             <form

@@ -46,6 +46,7 @@ function ChatRoomListItem({
     room,
     currentUserId,
     online,
+    isActive,
     onOpen
 }) {
     const profileImage =
@@ -67,7 +68,19 @@ function ChatRoomListItem({
         <li>
             <button
                 type="button"
-                className="chat-room-list-item"
+                className={[
+                    "chat-room-list-item",
+                    isActive
+                        ? "is-active"
+                        : ""
+                ]
+                    .filter(Boolean)
+                    .join(" ")}
+                aria-current={
+                    isActive
+                        ? "true"
+                        : undefined
+                }
                 onClick={
                     function () {
                         onOpen(room);
