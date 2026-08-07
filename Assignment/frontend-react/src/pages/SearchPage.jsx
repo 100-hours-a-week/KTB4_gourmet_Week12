@@ -11,6 +11,9 @@ import {
     searchPosts
 } from "../api/searchApi.js";
 
+import BoardBackButton
+    from "../components/common/BoardBackButton.jsx";
+
 import PostCard from
     "../components/post/PostCard.jsx";
 
@@ -419,6 +422,8 @@ function SearchPage() {
 
     return (
         <div className="search-page">
+            <BoardBackButton />
+
             <section className="search-intro">
                 <p className="search-eyebrow">
                     Integrated Search

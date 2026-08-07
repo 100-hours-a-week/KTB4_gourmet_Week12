@@ -6,6 +6,7 @@ import {
 
 import {
     Link,
+    useLocation,
     useNavigate
 } from "react-router";
 
@@ -32,6 +33,7 @@ function CommunityHeader({
     onToggleSidebar
 }) {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const profileMenuRef =
         useRef(null);
@@ -83,6 +85,16 @@ function CommunityHeader({
             );
         };
     }, []);
+
+    useEffect(function () {
+        if (
+            !location.pathname.startsWith(
+                "/search"
+            )
+        ) {
+            setSearchKeyword("");
+        }
+    }, [location.pathname]);
 
     function handleSearchSubmit(
         event
