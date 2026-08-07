@@ -124,7 +124,12 @@ function ChatLayoutPage() {
                         .filter(Boolean)
                         .join(" ")}
                 >
-                    <Outlet />
+                    <Outlet
+                        key={
+                            activeRoomId
+                            ?? "chat-empty"
+                        }
+                    />
                 </div>
             </div>
         </section>

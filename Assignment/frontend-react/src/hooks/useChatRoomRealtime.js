@@ -51,6 +51,7 @@ function useChatRoomRealtime({
     const {
         isConnected,
         presenceByUserId,
+        refreshPresence,
         sendTyping,
         subscribeChatRead,
         subscribeChatTyping
@@ -97,6 +98,73 @@ function useChatRoomRealtime({
             friendUserId
         )
         ?? resolvedFriendUserId;
+
+    /*
+     * 채팅방에 처음 진입했을 때 상대방 ID가
+     * roomInfo 또는 읽음 상태 조회를 통해 뒤늦게 확정될 수 있다.
+     *
+     * WebSocket Presence 이벤트는 "상태 변화"를 전달하는 역할이므로
+     * 이미 온라인인 사용자의 현재 상태를 항상 알려준다고 보장할 수 없다.
+     *
+     * 따라서 상대방 ID가 확정된 시점에 현재 Presence snapshot을
+     * 한 번 다시 조회하고, 이후 상태 변화는 WebSocket 이벤트로 갱신한다.
+     */
+    useEffect(
+        function () {
+            if (
+                !isConnected
+                || !effectiveFriendUserId
+            ) {
+                return undefined;
+            }
+
+            /*
+             * 이미 해당 사용자의 Presence 상태를 알고 있다면
+             * 같은 방 렌더링 과정에서 불필요한 REST 요청을 반복하지 않는다.
+             */
+            const alreadyResolved =
+                Object.prototype.hasOwnProperty.call(
+                    presenceByUserId,
+                    effectiveFriendUserId
+                );
+
+            if (alreadyResolved) {
+                return undefined;
+            }
+
+            const controller =
+                new AbortController();
+
+            refreshPresence({
+                signal:
+                    controller.signal
+            }).catch(
+                function (error) {
+                    if (
+                        error?.name
+                        === "AbortError"
+                    ) {
+                        return;
+                    }
+
+                    console.error(
+                        "채팅 상대 접속 상태 재조회 실패:",
+                        error
+                    );
+                }
+            );
+
+            return function () {
+                controller.abort();
+            };
+        },
+        [
+            effectiveFriendUserId,
+            isConnected,
+            presenceByUserId,
+            refreshPresence
+        ]
+    );
 
     useEffect(
         function () {

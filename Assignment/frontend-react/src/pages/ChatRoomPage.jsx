@@ -568,13 +568,11 @@ function ChatRoomPage() {
                         .current = true;
 
                     setMessages(
-                        function (previous) {
-                            return mergeMessages(
-                                previous,
-                                response?.content
-                                ?? []
-                            );
-                        }
+                        mergeMessages(
+                            [],
+                            response?.content
+                            ?? []
+                        )
                     );
 
                     setNextBeforeSequence(
